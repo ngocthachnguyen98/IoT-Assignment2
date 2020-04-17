@@ -1,4 +1,7 @@
-# This class defines Bookings
+"""
+This Booking class is for interaction with Bookings table in the MySQL database
+"""
+
 import datetime
 import idGenerator
 
@@ -7,46 +10,44 @@ from mysql.connector import Error
 from mysql.connector import errorCode
 
 class Booking:
-    # Attributes
-    id = 0
-    user_id = 0
-    car_id = 0
-    begin_time = datetime.datetime.now
-    return_time = datetime.datetime.now
-    done = False
 
-    # Constructor
-    def __init__(self, user_id, car_id, begin_time, return_time):
-        self.id = idGenerator.bookingIdGenerator
-        self.user_id = user_id
-        self.car_id = car_id
-        self.begin_time = begin_time
-        self.return_time = return_time
+    # Part A
+    def make_a_booking(parameter_list):
+        """
+        The user needs to select which car they want to book and input the duration they want to use. 
+        A car that is booked cannot be booked again until returned. 
+        
+        Note: when booked, an event should be added to Google Calendar, detailing the car, who books the car and the booked duration. Google Calendar will be tied to the Google login of the user.
+        
+        A new row in Bookings table will be added.
+        """
+        pass
 
-        # sql command to insert a row to Cars table
-        try:
-            connection = mysql.connector.connect(host='localhost',
-                                                database='carshare',
-                                                user='root',
-                                                password='pynative@#29')
+    def cancel_a_booking(parameter_list):
+        """
+        The event added to Google Calendar will be removed, and the related information in the database needs to be modified.
 
-            mySql_insert_query = "INSERT INTO Bookings (id, user_id, car_id, begin_time, return_time, booked) 
-                                VALUES (self.id, self.user_id, self.car_id, self.begin_time, self.return_time, self.booked)"
+        A row in Bookings table will be removed.
+        """
+        pass
 
-            cursor = connection.cursor()
-            cursor.execute(mySql_insert_query)
-            connection.commit()
-            print(cursor.rowcount, "Record inserted successfully into Bookings table")
-            
-            cursor.close()
+    # Part B
+    def unlock_a_car(parameter_list):
+        """
+        To unlock the car, User provides current date and time, username, password, carID. These will be checked in the **Bookings** table.
+        
+        If everything is validated:
+            - The booking's "ongoing" will be change to true
 
-        except mysql.connector.Error as error:
-            print("Failed to insert record into Bookings table {}".format(error))
 
-        finally:
-            if (connection.is_connected()):
-                connection.close()
-                print("MySQL connection is closed")
+        A SELECT query will be executed in Bookings table to see if validated.
+        """
+        pass
 
-    def confirmDone(self):
-        self.done = True
+    def lock_a_car(parameter_list):
+        """
+        When user locks the car, this means "the booking is over (it's a history now) and can be removed":
+            - The booking with the targeted car_id and the ongoing status (true) will be removed from Bookings table and added to Histories table
+            - Car's booked attribute will be changed to true again in Cars table
+        """
+        pass

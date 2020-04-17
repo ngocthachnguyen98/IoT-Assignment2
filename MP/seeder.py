@@ -10,7 +10,10 @@ from mysql.connector import errorCode
 class Seeder:
 
     def seedUsersTable():
-        # List of 10 queries to be executed (2 Admins, 3 Engineers and 5 Customers)
+        """
+        A list of queries will be executed to populate Users table with 2 Admins, 3 Engineers and 5 Customers.
+        """        
+        # List of 10 queries to be executed
         queries = [
             "INSERT INTO Users (username, password, email, fname, lname, role) VALUES ("User1", "pw1", "user1@carshare.com", "Adams", "Ada", "Admin")",
             "INSERT INTO Users (username, password, email, fname, lname, role) VALUES ("User2", "pw2", "user2@carshare.com", "Baker", "Bak", "Admin")",
@@ -51,7 +54,10 @@ class Seeder:
                 print("MySQL connection is closed")
 
     def seedCarsTable():
-        # List of 10 queries to be executed (6 Toyatas, 4 Hondas)
+        """
+        A list of queries will be executed to populate Users table with 6 Toyatas and 4 Hondas.
+        """ 
+        # List of 10 queries to be executed 
         queries = [
             "INSERT INTO Cars (make, body_type, colour, seats, location, cost_per_hour, booked) VALUES ("Toyota", "Sedan", "Black", "5", "-37.814, 144.96332", 10.50,  False)",
             "INSERT INTO Cars (make, body_type, colour, seats, location, cost_per_hour, booked) VALUES ("Toyota", "Sedan", "Red", "5", "-37.814, 144.96332", 10.50,  False)",

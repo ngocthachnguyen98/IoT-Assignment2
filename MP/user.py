@@ -1,4 +1,7 @@
-# This class defines Users
+"""
+This User class is for interaction with Users table in the MySQL database
+"""
+
 import idGenerator
 
 import mysql.connector
@@ -6,66 +9,28 @@ from mysql.connector import Error
 from mysql.connector import errorCode
 
 class User:
-    id = 0
-    username = 'username'
-    password = 'password'
-    email = 'email@gmail.com'
-    fname = 'first_name'
-    lname = 'last_name'
-    role = 'role'
 
+    # Part A
+    def register(self, username, password, email, fname, lname, role):
+        """
+        A new row will be input into Users table. The function should check whether the username and email is duplicated in the database.
+        """        
 
-    # Constructor
-    def __init__(self, username, password, email, fname, lname, role):
-        self.id = idGenerator.userIdGenerator
-        self.username = username
-        self.password = password
-        self.email = email
-        self.fname = fname
-        self.lname = lname
-        self.role = role
+    def login(self, username, password):
+        """
+        Upon logging, username and password will be checked in the Users table to validate the user.
+        A connection will be establish to the database. A SELECT query will be executed to find out if the user's credential available in the database.
+        
+        If the query returns 1 row, the function will return True.
+        If the query returns 0 row, the function will return False.
 
-        # sql command to insert a row to Users table
-        try:
-            connection = mysql.connector.connect(host='localhost',
-                                                database='carshare',
-                                                user='root',
-                                                password='pynative@#29')
+        Arguments:
+            username {String} -- User's credential
+            password {String} -- User's credential
+        """
 
-            mySql_insert_query = "INSERT INTO Users (id, username, password, email, fname, lname, role) 
-                                VALUES (self.id, self.username, self.password, self.email, self.fname, self.lname, self.role)"
-
-            cursor = connection.cursor()
-            cursor.execute(mySql_insert_query)
-            connection.commit()
-            print(cursor.rowcount, "Record inserted successfully into Users table")
-
-            cursor.close()
-
-        except mysql.connector.Error as error:
-            print("Failed to insert record into Users table {}".format(error))
-
-        finally:
-            if (connection.is_connected()):
-                connection.close()
-                print("MySQL connection is closed")
-    
-    # Getter
-    def getUserName(self):
-        return self.username
-
-    def getPassword(self):
-        return self.password
-    
-    def getEmail(self):
-        return self.email
-    
-    def getFname(self):
-        return self.fname
-    
-    def getLnameLname(self):
-        return self.lname
-    
-    def getRole(self):
-        return self.role
-    
+    def logout(self):
+        """
+        Log the user out of the system
+        """
+        

@@ -1,4 +1,7 @@
-# This is the class defines Car
+"""
+This Car class is for interaction with Cars table in the MySQL database
+"""
+
 import idGenerator
 
 import mysql.connector
@@ -6,58 +9,30 @@ from mysql.connector import Error
 from mysql.connector import errorCode
 
 class Car:
-    # Attributes
-    id = 0
-    make = 'Make'
-    body_type = 'Body Type'
-    colour = 'Colour'
-    seats = 2
-    location = 'Location'
-    cost_per_hour = 20.99 # Should we make this a decimal-type variable? e.g. the cost could $20.99/hour
-    booked = False 
-
-    # Constructor
-    def __init__(self, make, body_type, colour, seats, location, cost_per_hour):
-        self.id = idGenerator.carIdGenerator
-        self.make = make
-        self.body_type = body_type
-        self.colour = colour
-        self.seats = seats
-        self.location = location
-        self.cost_per_hour = cost_per_hour
-
-        # sql command to insert a row to Cars table
-        try:
-            connection = mysql.connector.connect(host='localhost',
-                                                database='carshare',
-                                                user='root',
-                                                password='pynative@#29')
-
-            mySql_insert_query = "INSERT INTO Cars (id, make, body_type, colour, seats, location, cost_per_hour, booked) 
-                                VALUES (self.id, self.make, self.body_type, self.colour, self.seats, self.location, self.cost_per_hour, False)"
-
-            cursor = connection.cursor()
-            cursor.execute(mySql_insert_query)
-            connection.commit()
-            print(cursor.rowcount, "Record inserted successfully into Cars table")
-            
-            cursor.close()
-
-        except mysql.connector.Error as error:
-            print("Failed to insert record into Cars table {}".format(error))
-
-        finally:
-            if (connection.is_connected()):
-                connection.close()
-                print("MySQL connection is closed")
     
-    # Book the car
-    def book(self):
-        self.booked = True
-    
-    # Lock and unlock
-    def lock(self):
+    # Part A
+    def show_all_available_car(self):
+        """
+        Show a list of cars available
+
+        QUESTIONS:
+            - Is this returning all rows in Cars table?
+            - Or just returing the cars which are available on certain dates? (filters) [search_car() can be used for this]
+        """
         pass
-    
-    def unlock(self):
+
+    def search_car(parameter_list):
+        """
+        Be able to search by any of the car’s properties
+
+        QUESTIONS:
+            - What are the properties/filters to search by?
+        """
+        pass
+
+    # Part B
+    def show_all_car_location(parameter_list):
+        """
+        This function will help showing all the car's location by using Google Map API
+        """
         pass
