@@ -1,4 +1,4 @@
-# This class defines Bookings
+# This class defines Histories
 import datetime
 import idGenerator
 
@@ -6,18 +6,17 @@ import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorCode
 
-class Booking:
+class History:
     # Attributes
     id = 0
     user_id = 0
     car_id = 0
     begin_time = datetime.datetime.now
     return_time = datetime.datetime.now
-    done = False
 
     # Constructor
     def __init__(self, user_id, car_id, begin_time, return_time):
-        self.id = idGenerator.bookingIdGenerator
+        self.id = idGenerator.historyIdGenerator
         self.user_id = user_id
         self.car_id = car_id
         self.begin_time = begin_time
@@ -30,23 +29,23 @@ class Booking:
                                                 user='root',
                                                 password='pynative@#29')
 
-            mySql_insert_query = "INSERT INTO Bookings (id, user_id, car_id, begin_time, return_time, booked) 
-                                VALUES (self.id, self.user_id, self.car_id, self.begin_time, self.return_time, self.booked)"
+            mySql_insert_query = "INSERT INTO Histories (id, user_id, car_id, begin_time, return_time) 
+                                VALUES (self.id, self.user_id, self.car_id, self.begin_time, self.return_time)"
 
             cursor = connection.cursor()
             cursor.execute(mySql_insert_query)
             connection.commit()
-            print(cursor.rowcount, "Record inserted successfully into Bookings table")
+            print(cursor.rowcount, "Record inserted successfully into Histories table")
             
             cursor.close()
 
         except mysql.connector.Error as error:
-            print("Failed to insert record into Bookings table {}".format(error))
+            print("Failed to insert record into Histories table {}".format(error))
 
         finally:
             if (connection.is_connected()):
                 connection.close()
                 print("MySQL connection is closed")
 
-    def confirmDone(self):
-        self.done = True
+    def showUserHistory(self, user_id):
+        pass

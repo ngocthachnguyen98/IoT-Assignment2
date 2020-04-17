@@ -1,26 +1,55 @@
-import idGenerator
 # This is the class defines Car
-# Car class
+import idGenerator
+
+import mysql.connector
+from mysql.connector import Error
+from mysql.connector import errorCode
+
 class Car:
-    # Attributes of Cars
+    # Attributes
     id = 0
     make = 'Make'
-    bodyType = 'Body Type'
+    body_type = 'Body Type'
     colour = 'Colour'
     seats = 2
     location = 'Location'
-    costPerHour = 20
-    booked = False
+    cost_per_hour = 20.99 # Should we make this a decimal-type variable? e.g. the cost could $20.99/hour
+    booked = False 
+
     # Constructor
-    def __init__(self, make, bodyType, colour, seats, location, costPerHour):
+    def __init__(self, make, body_type, colour, seats, location, cost_per_hour):
         self.id = idGenerator.carIdGenerator
         self.make = make
-        self.bodyType = bodyType
+        self.body_type = body_type
         self.colour = colour
         self.seats = seats
         self.location = location
-        self.costPerHour = costPerHour
-        # sql command to add to table here
+        self.cost_per_hour = cost_per_hour
+
+        # sql command to insert a row to Cars table
+        try:
+            connection = mysql.connector.connect(host='localhost',
+                                                database='carshare',
+                                                user='root',
+                                                password='pynative@#29')
+
+            mySql_insert_query = "INSERT INTO Cars (id, make, body_type, colour, seats, location, cost_per_hour, booked) 
+                                VALUES (self.id, self.make, self.body_type, self.colour, self.seats, self.location, self.cost_per_hour, False)"
+
+            cursor = connection.cursor()
+            cursor.execute(mySql_insert_query)
+            connection.commit()
+            print(cursor.rowcount, "Record inserted successfully into Cars table")
+            
+            cursor.close()
+
+        except mysql.connector.Error as error:
+            print("Failed to insert record into Cars table {}".format(error))
+
+        finally:
+            if (connection.is_connected()):
+                connection.close()
+                print("MySQL connection is closed")
     
     # Book the car
     def book(self):
@@ -30,6 +59,5 @@ class Car:
     def lock(self):
         pass
     
-
     def unlock(self):
         pass

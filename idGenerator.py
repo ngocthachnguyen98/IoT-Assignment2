@@ -5,6 +5,7 @@ def idGenerator():
         idGenerator.id = 0
     idGenerator.id += 1
     return idGenerator.id
+
 def userIdGenerator():
     pass
 
@@ -12,4 +13,7 @@ def carIdGenerator():
     pass
 
 def bookingIdGenerator():
+    pass
+
+def historyIdGenerator():
     pass
