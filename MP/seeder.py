@@ -103,8 +103,8 @@ class Seeder:
         """ 
         # List of 2 queries to be executed 
         queries = [
-            "INSERT INTO Cars (user_id, car_id, begin_time, return_time) VALUES (6, 1, \'2020-04-01 08:00:00\', \'2020-04-01 09:00:00\')",
-            "INSERT INTO Cars (user_id, car_id, begin_time, return_time) VALUES (7, 2, \'2020-03-01 18:00:00\', \'2020-03-01 19:00:00\')"
+            "INSERT INTO Histories (user_id, car_id, begin_time, return_time) VALUES (6, 1, \'2020-04-01 08:00:00\', \'2020-04-01 09:00:00\')",
+            "INSERT INTO Histories (user_id, car_id, begin_time, return_time) VALUES (7, 2, \'2020-03-01 18:00:00\', \'2020-03-01 19:00:00\')"
         ]
 
         try:
