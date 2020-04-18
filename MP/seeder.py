@@ -9,7 +9,7 @@ from mysql.connector import errorCode
 
 class Seeder:
 
-    def seedUsersTable():
+    def seedUsersTable(self):
         """
         A list of queries will be executed to populate Users table with 2 Admins, 3 Engineers and 5 Customers.
         """        
@@ -53,7 +53,7 @@ class Seeder:
                 connection.close()
                 print("MySQL connection is closed")
 
-    def seedCarsTable():
+    def seedCarsTable(self):
         """
         A list of queries will be executed to populate Cars table with 6 Toyatas and 4 Hondas.
         """ 
@@ -97,8 +97,8 @@ class Seeder:
                 connection.close()
                 print("MySQL connection is closed")
 
-    def seedHistoriesTable():
-         """
+    def seedHistoriesTable(self):
+        """
         A list of queries will be executed to populate Histories table (2 histories).
         """ 
         # List of 2 queries to be executed 
@@ -133,7 +133,7 @@ class Seeder:
                 connection.close()
                 print("MySQL connection is closed")
 
-    def seed():
+    def seed(self):
         seedUsersTable()
         seedCarsTable()
         seedHistoriesTable()
