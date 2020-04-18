@@ -91,6 +91,44 @@ class Seeder:
                 connection.close()
                 print("MySQL connection is closed")
 
+    def seedHistoriesTable():
+         """
+        A list of queries will be executed to populate Histories table (2 rows)
+        """ 
+        # List of 2 queries to be executed 
+        queries = [
+            "INSERT INTO Histories (user_id, car_id, begin_time, return_time) VALUES (6, 1, '2020-04-1 08:00:00', '2020-04-1 09:00:00')", # datetime - "YYYY-MM-DD hh:mm:ss"
+            "INSERT INTO Histories (user_id, car_id, begin_time, return_time) VALUES (7, 2, '2020-03-1 18:00:00', '2020-04-1 19:00:00')" # datetime - "YYYY-MM-DD hh:mm:ss"
+        ]
+
+        try:
+        # Establish connection with MySQL database
+        connection = mysql.connector.connect(host='localhost',
+                                            database='carshare',
+                                            user='root',
+                                            password='pynative@#29')
+
+        # Insert rows
+        cursor = connection.cursor()
+        for q in queries:
+            cursor.execute(q)
+    
+        # Commit changes
+        connection.commit()
+        print("{} records inserted successfully into Histories table".format(cursor.rowcount))
+
+        cursor.close()
+
+        except mysql.connector.Error as error:
+            print("Failed to insert record into Histories table {}".format(error))
+
+        finally:
+            if (connection.is_connected()):
+                connection.close()
+                print("MySQL connection is closed")
+
+
     def seed():
         seedUsersTable()
         seedCarsTable()
+        seedHistoriesTable()
