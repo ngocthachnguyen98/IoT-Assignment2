@@ -9,7 +9,7 @@ from mysql.connector import errorcode
 HOST = "35.189.9.144"
 USER = "root"
 PASSWORD = "iotassignment2"
-DATABASE = "carshare"
+DATABASE = "CarShare"
 
 def newDBConnection():
 	connection = mysql.connector.connect(host = HOST, database = DATABASE, 
