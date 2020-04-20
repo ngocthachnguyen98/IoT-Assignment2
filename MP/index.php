@@ -6,7 +6,7 @@
     <form action = "index.php" method = "post">
         Username: <input type = "text" name="username" /><br>
         Password: <input type="password" name="password"/><br>
-        <input type="submit" value="Log In" />
+        <input type="submit" name = "submit" value="Log In" />
         <?php
             $message="";
             if(isset($_POST['submit'])){

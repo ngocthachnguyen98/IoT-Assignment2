@@ -6,7 +6,13 @@ import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorcode
 
+HOST = "35.189.9.144"
+USER = "root"
+PASSWORD = "iotassignment2"
+DATABASE = "carshare"
 
+connection = mysql.connector.connect(host = HOST, database = DATABASE, 
+									user = USER, password = PASSWORD)
 class Seeder:
 
 	def seedUsersTable():
@@ -29,10 +35,10 @@ class Seeder:
 
 		try:
 			# Establish connection with MySQL database
-			connection = mysql.connector.connect(host='localhost',
-											database='carshare',
-											user='root',
-											password='pynative@#29')
+			# connection = mysql.connector.connect(host='localhost',
+			# 								database='carshare',
+			# 								user='root',
+			# 								password='pynative@#29')
 
 			# Insert rows
 			cursor = connection.cursor()
@@ -73,10 +79,10 @@ class Seeder:
 
 		try:
 			# Establish connection with MySQL database
-			connection = mysql.connector.connect(host='localhost',
-												database='carshare',
-												user='root',
-												password='pynative@#29')
+			# connection = mysql.connector.connect(host='localhost',
+			# 									database='carshare',
+			# 									user='root',
+			# 									password='pynative@#29')
 
 			# Insert rows
 			cursor = connection.cursor()
@@ -109,10 +115,10 @@ class Seeder:
 
 		try:
 			# Establish connection with MySQL database
-			connection = mysql.connector.connect(host='localhost',
-												database='carshare',
-												user='root',
-												password='pynative@#29')
+			# connection = mysql.connector.connect(host='localhost',
+			# 									database='carshare',
+			# 									user='root',
+			# 									password='pynative@#29')
 
 			# Insert rows
 			cursor = connection.cursor()
