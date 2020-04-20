@@ -144,6 +144,6 @@ class Seeder:
 				print("MySQL connection is closed")
 
 	def seed(self):
-		seedUsersTable()
-		seedCarsTable()
-		seedHistoriesTable()
+		self.seedUsersTable()
+		self.seedCarsTable()
+		self.seedHistoriesTable()
