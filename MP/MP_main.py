@@ -2,7 +2,7 @@
 - Import modules
 - Running functions
 """
-import seeder
+from seeder import Seeder
 
-seeder = seeder.Seeder
+seeder = Seeder()
 seeder.seed()
