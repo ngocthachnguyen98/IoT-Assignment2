@@ -11,8 +11,11 @@ USER = "root"
 PASSWORD = "iotassignment2"
 DATABASE = "carshare"
 
-connection = mysql.connector.connect(host = HOST, database = DATABASE, 
+def newDBConnection():
+	connection = mysql.connector.connect(host = HOST, database = DATABASE, 
 									user = USER, password = PASSWORD)
+	return connection
+
 class Seeder:
 
 	def seedUsersTable():
@@ -39,6 +42,7 @@ class Seeder:
 			# 								database='carshare',
 			# 								user='root',
 			# 								password='pynative@#29')
+			connection = newDBConnection()
 
 			# Insert rows
 			cursor = connection.cursor()
@@ -83,7 +87,7 @@ class Seeder:
 			# 									database='carshare',
 			# 									user='root',
 			# 									password='pynative@#29')
-
+			connection = newDBConnection()
 			# Insert rows
 			cursor = connection.cursor()
 			for q in queries:
@@ -119,7 +123,7 @@ class Seeder:
 			# 									database='carshare',
 			# 									user='root',
 			# 									password='pynative@#29')
-
+			connection = newDBConnection()
 			# Insert rows
 			cursor = connection.cursor()
 			for q in queries:

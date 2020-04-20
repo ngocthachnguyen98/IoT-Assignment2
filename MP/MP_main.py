@@ -4,5 +4,5 @@
 """
 import seeder
 
-seeder = seeder.Seeder()
-seeder.seed
+seeder = seeder.Seeder
+seeder.seed()
