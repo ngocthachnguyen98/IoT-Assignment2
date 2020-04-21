@@ -62,7 +62,7 @@ REGISTER:
     e.g. SELECT * FROM Users WHERE username="user1" OR email="user1@carshare.com";
 
 - IF True:
-    INSERT INTO Users (username, password, email, fname, lname, role) VALUES ("User100", "pw100", "user100@carshare.com", "Thach", "Nguyen", "Customer"); 
+    INSERT INTO Users (username, password, email, fname, lname, role) VALUES ("user100", "pw100", "user100@carshare.com", "Thach", "Nguyen", "Customer"); 
 
 ================================================================================================================================================================================
 
