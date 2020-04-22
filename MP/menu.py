@@ -37,10 +37,10 @@ class Menu:
             print("MENU 2")
             print("1. Make a Booking")
             print("2. Cancel a Booking")
-            print("3. Show unbooked car")
+            print("3. Show unbooked cars")
             print("4. Car search")
             print("5. View your history")
-            print("0. Quit")
+            print("0. Log out")
             selection = input("Select an option: ")
             print()
 
@@ -53,7 +53,7 @@ class Menu:
                 print()
                 break
             elif(selection == "3"):
-                print("SHOW UNBOOKED CAR")
+                print("SHOW UNBOOKED CARS")
                 print()
                 break
             elif(selection == "4"):
