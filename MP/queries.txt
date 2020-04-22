@@ -1,0 +1,149 @@
+================================================================================================================================================================================
+    FOR TABLES CREATION
+================================================================================================================================================================================
+
+Look for MySQL Script in #features channel on Slack
+
+================================================================================================================================================================================
+    FOR SEEDING / MIGRATING DATABASE
+================================================================================================================================================================================
+
+TRUNCATE (delete any data in the tables):
+
+- TRUNCATE BOOKINGS;
+- TRUNCATE HISTORIES;
+- TRUNCATE USERS;
+- TRUNCATE CARS;
+
+================================================================================================================================================================================
+
+SEEDING USERS:
+
+INSERT INTO Users (username, password, email, fname, lname, role) VALUES ("user1", "pw1", "user1@carshare.com", "Adams", "Ada", "Admin");
+INSERT INTO Users (username, password, email, fname, lname, role) VALUES ("user2", "pw2", "user2@carshare.com", "Baker", "Bak", "Admin");
+INSERT INTO Users (username, password, email, fname, lname, role) VALUES ("user3", "pw3", "user3@carshare.com", "Clark", "Cla", "Engineer");
+INSERT INTO Users (username, password, email, fname, lname, role) VALUES ("user4", "pw4", "user4@carshare.com", "Davis", "Dav", "Engineer");
+INSERT INTO Users (username, password, email, fname, lname, role) VALUES ("user5", "pw5", "user5@carshare.com", "Evans", "Eva", "Engineer");
+INSERT INTO Users (username, password, email, fname, lname, role) VALUES ("user6", "pw6", "user6@carshare.com", "Frank", "Fra", "Customer");
+INSERT INTO Users (username, password, email, fname, lname, role) VALUES ("user7", "pw7", "user7@carshare.com", "Ghosh", "Gho", "Customer");
+INSERT INTO Users (username, password, email, fname, lname, role) VALUES ("user8", "pw8", "user8@carshare.com", "Hills", "Hil", "Customer");
+INSERT INTO Users (username, password, email, fname, lname, role) VALUES ("user9", "pw9", "user9@carshare.com", "Irwin", "Irw", "Customer");
+INSERT INTO Users (username, password, email, fname, lname, role) VALUES ("user10", "pw10", "user10@carshare.com", "Jones", "Jon", "Customer");
+
+================================================================================================================================================================================
+
+SEEDING CARS:
+
+INSERT INTO Cars (make, body_type, colour, seats, location, cost_per_hour, booked) VALUES ("Toyota", "Sedan", "Black", 5, "-37.814, 144.96332", 10.50,  False);
+INSERT INTO Cars (make, body_type, colour, seats, location, cost_per_hour, booked) VALUES ("Toyota", "Sedan", "Red", 5, "-37.814, 144.96332", 10.50,  False);
+INSERT INTO Cars (make, body_type, colour, seats, location, cost_per_hour, booked) VALUES ("Toyota", "SUV", "Black", 5, "-33.865143, 151.209900", 15.50,  False);
+INSERT INTO Cars (make, body_type, colour, seats, location, cost_per_hour, booked) VALUES ("Toyota", "SUV", "Red", 5, "-33.865143, 151.209900", 15.50,  False);
+INSERT INTO Cars (make, body_type, colour, seats, location, cost_per_hour, booked) VALUES ("Toyota", "Van", "Black", 10, "-35.282001, 149.128998", 20.50,  False);
+INSERT INTO Cars (make, body_type, colour, seats, location, cost_per_hour, booked) VALUES ("Toyota", "Van", "Red", 10, "-35.282001, 149.128998", 20.50,  False);
+INSERT INTO Cars (make, body_type, colour, seats, location, cost_per_hour, booked) VALUES ("Honda", "Sedan", "White", 5, "-35.282001, 149.128998", 12.50,  False);
+INSERT INTO Cars (make, body_type, colour, seats, location, cost_per_hour, booked) VALUES ("Honda", "Sedan", "Blue", 5, "-35.282001, 149.128998", 12.50,  False);
+INSERT INTO Cars (make, body_type, colour, seats, location, cost_per_hour, booked) VALUES ("Honda", "SUV", "White", 7, "-33.865143, 151.209900", 19.50,  False);
+INSERT INTO Cars (make, body_type, colour, seats, location, cost_per_hour, booked) VALUES ("Honda", "SUV", "Blue", 7, "-35.282001, 149.128998", 19.50,  False);
+
+================================================================================================================================================================================
+
+SEEDING HISTORIES:
+
+INSERT INTO Histories (user_id, car_id, begin_time, return_time) VALUES (6, 1, '2020-04-01 08:00:00', '2020-04-01 09:00:00');
+INSERT INTO Histories (user_id, car_id, begin_time, return_time) VALUES (7, 2, '2020-03-01 18:00:00', '2020-03-01 19:00:00');
+
+================================================================================================================================================================================
+    FOR USER'S FEATURES
+================================================================================================================================================================================
+
+REGISTER:
+
+- SELECT * FROM Users WHERE username=arg1 OR email=arg2
+    e.g. SELECT * FROM Users WHERE username="user1" OR email="user1@carshare.com";
+
+- IF True:
+    INSERT INTO Users (username, password, email, fname, lname, role) VALUES ("user100", "pw100", "user100@carshare.com", "Thach", "Nguyen", "Customer"); 
+
+================================================================================================================================================================================
+
+LOGIN:
+
+- SELECT * FROM Users WHERE username=arg1 OR password=arg2
+    e.g. SELECT * FROM Users WHERE username="user1" OR password="pw1";
+
+================================================================================================================================================================================
+
+VIEW HISTORIES:
+
+- SELECT * FROM Histories WHERE user_id=arg1
+    e.g. SELECT * FROM Histories WHERE user_id=6;
+
+================================================================================================================================================================================
+
+SHOW ALL CARS (NOT BOOKED CARS):
+
+- SELECT * FROM Cars WHERE booked=False;
+
+
+================================================================================================================================================================================
+
+SEARCH FOR CARS (only cars that are not booked):
+
+- SELECT * FROM Cars WHERE [filters] AND booked=False
+    e.g. SELECT * FROM Cars WHERE make="Toyota" AND booked=False;
+
+================================================================================================================================================================================
+
+MAKE A BOOKING:
+
+- INSERT INTO Bookings (user_id, car_id, begin_time, return_time, ongoing) VALUES (arg1, arg2, arg3, arg4, False)
+    e.g. INSERT INTO Bookings (user_id, car_id, begin_time, return_time, ongoing) VALUES (1, 1, '2011-04-12 00:00:00', '2011-04-12 03:00:00', False);
+
+- UPDATE Cars SET booked=True WHERE id=arg2
+    e.g. UPDATE Cars SET booked=True WHERE id=1;
+
+================================================================================================================================================================================
+
+CANCEL A BOOKING:
+
+- DELETE FROM Bookings WHERE user_id=arg1 AND car_id=arg2 AND begin_time=arg3
+    e.g. DELETE FROM Bookings WHERE user_id=1 AND car_id=1 AND begin_time='2011-04-12 00:00:00';
+
+- UPDATE Cars SET booked=False WHERE car_id=arg2
+    e.g. UPDATE Cars SET booked=False WHERE id=1;
+
+================================================================================================================================================================================
+
+UNLOCK A CAR:
+
+- Login on AP:
+    SELECT * FROM Users WHERE username=arg1 OR password=arg2
+        e.g. SELECT * FROM Users WHERE username="user1" OR password="pw1";
+
+- Enter booking time and car id to unlock (with AP):
+    UPDATE Bookings 
+    SET ongoing=True 
+    WHERE begin_time=arg1 AND car_id=arg2
+        e.g.    UPDATE Bookings SET ongoing=True WHERE begin_time='2011-04-12 00:00:00' AND car_id=1;
+
+================================================================================================================================================================================
+
+LOCK A CAR:
+
+- INSERT INTO Histories (user_id, car_id, begin_time, return_time) 
+    SELECT user_id, car_id, begin_time, return_time 
+    FROM Bookings 
+    WHERE ongoing=True AND car_id=arg1 
+    
+    e.g.    INSERT INTO Histories (user_id, car_id, begin_time, return_time) 
+            SELECT user_id, car_id, begin_time, return_time 
+            FROM Bookings 
+            WHERE ongoing=True AND car_id=1; 
+
+- DELETE FROM Bookings WHERE ongoing=True AND car_id=arg1
+    e.g. DELETE FROM Bookings WHERE ongoing=True AND car_id=1;
+
+- UPDATE Cars SET booked=False WHERE car_id=arg1
+    e.g. UPDATE Cars SET booked=False WHERE id=1;
+
+================================================================================================================================================================================
