@@ -9,7 +9,7 @@ class Menu:
             print()
             print("MENU 1")
             print("1. Register Example")
-            print("2. Login Example")
+            print("2. Login")
             print("0. Quit")
             selection = input("Select an option: ")
             print()
@@ -19,7 +19,7 @@ class Menu:
                     db.register("user100", "pw100", "user100@carshare.com", "Thach", "Nguyen", "Customer")
             elif(selection == "2"):
                 with DatabaseUtils() as db:
-                    logged_in = db.login("user12", "pw12")
+                    logged_in = self.login()
 
                     if logged_in:
                         self.runMenu2()
@@ -69,6 +69,13 @@ class Menu:
                 break
             else:
                 print("Invalid input - please try again.")
+
+    def login(self):
+        print("--- Login ---")
+        username = input("Enter the username: ")
+        password = input("Enter the password: ")
+        with DatabaseUtils() as db:
+            return db.login(username, password)
 
 if __name__ == "__main__":
     Menu().main()
