@@ -2,12 +2,14 @@ from database_utils import DatabaseUtils
 
 class Menu:
     def main(self):
-        self.runMenu()
+        self.runMenu1()
 
-    def runMenu(self):
+    def runMenu1(self):
         while(True):
             print()
+            print("MENU 1")
             print("1. Register Example")
+            print("2. Login Example")
             print("0. Quit")
             selection = input("Select an option: ")
             print()
@@ -15,8 +17,55 @@ class Menu:
             if(selection == "1"):
                 with DatabaseUtils() as db:
                     db.register("user100", "pw100", "user100@carshare.com", "Thach", "Nguyen", "Customer")
+            elif(selection == "2"):
+                with DatabaseUtils() as db:
+                    logged_in = db.login("user12", "pw12")
+
+                    if logged_in:
+                        self.runMenu2()
+                    else:
+                        print("Re-run Menu 1...")
             elif(selection == "0"):
                 print("Goodbye!")
+                break
+            else:
+                print("Invalid input - please try again.")
+
+    def runMenu2(self):
+        while(True):
+            print()
+            print("MENU 2")
+            print("1. Make a Booking")
+            print("2. Cancel a Booking")
+            print("3. Show unbooked car")
+            print("4. Car search")
+            print("5. View your history")
+            print("0. Quit")
+            selection = input("Select an option: ")
+            print()
+
+            if(selection == "1"):
+                print("MAKE A BOOKING")
+                print()
+                break
+            elif(selection == "2"):
+                print("CANCEL A BOOKING")
+                print()
+                break
+            elif(selection == "3"):
+                print("SHOW UNBOOKED CAR")
+                print()
+                break
+            elif(selection == "4"):
+                print("CAR SEARCH")
+                print()
+                break
+            elif(selection == "5"):
+                print("VIEW YOUR HISTORY")
+                print()
+                break
+            elif(selection == "0"):
+                print("Logged out!")
                 break
             else:
                 print("Invalid input - please try again.")
