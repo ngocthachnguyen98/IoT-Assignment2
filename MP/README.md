@@ -10,8 +10,8 @@ python3 menu.py
 Then choose the function your want to run or test.
 
 ## MENU 1
-1. Register Example
-2. Login Example (after logged in, this will take you to Menu 2)
+1. Register
+2. Login (after logged in, this will take you to Menu 2)
 0. Exit
 
 ## MENU 2

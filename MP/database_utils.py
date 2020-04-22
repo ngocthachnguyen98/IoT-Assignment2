@@ -50,7 +50,7 @@ class DatabaseUtils:
                 # Execute and commit
                 cursor.execute(insert_stmt, data)
                 self.connection.commit()
-                print("Inserted...")
+                print("Registered...")
 
                 # Return True if insert successfully
                 return cursor.rowcount == 1

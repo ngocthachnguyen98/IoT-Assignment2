@@ -8,7 +8,7 @@ class Menu:
         while(True):
             print()
             print("MENU 1")
-            print("1. Register Example")
+            print("1. Register")
             print("2. Login")
             print("0. Quit")
             selection = input("Select an option: ")
@@ -16,7 +16,10 @@ class Menu:
 
             if(selection == "1"):
                 with DatabaseUtils() as db:
-                    db.register("user100", "pw100", "user100@carshare.com", "Thach", "Nguyen", "Customer")
+                    # To skip prompting, uncomment the line below:
+                    #db.register("user100", "pw100", "user100@carshare.com", "Thach", "Nguyen", "Customer")
+                    
+                    self.register()
             elif(selection == "2"):
                 with DatabaseUtils() as db:
                     logged_in = self.login()
@@ -45,35 +48,48 @@ class Menu:
             print()
 
             if(selection == "1"):
-                print("MAKE A BOOKING")
+                print("--- Make a Booking ---")
                 print()
                 break
             elif(selection == "2"):
-                print("CANCEL A BOOKING")
+                print("--- Cancel a Booking ---")
                 print()
                 break
             elif(selection == "3"):
-                print("SHOW UNBOOKED CARS")
+                print("--- Show unbooked car ---")
                 print()
                 break
             elif(selection == "4"):
-                print("CAR SEARCH")
+                print("--- Car search ---")
                 print()
                 break
             elif(selection == "5"):
-                print("VIEW YOUR HISTORY")
+                print("--- View your history ---")
                 print()
                 break
             elif(selection == "0"):
-                print("Logged out!")
+                print("--- Logged out! ---")
                 break
             else:
                 print("Invalid input - please try again.")
+
+    def register(self):
+        print("--- Register ---")
+        username = input("Enter your username: ")
+        password = input("Enter your password: ")
+        email = input("Enter your email: ")
+        fname = input("Enter your first name: ")
+        lname = input("Enter your last name: ")
+        role = input("Enter your role: ")
+
+        with DatabaseUtils() as db:
+            db.register(username, password, email, fname, lname, role)
 
     def login(self):
         print("--- Login ---")
         username = input("Enter the username: ")
         password = input("Enter the password: ")
+        
         with DatabaseUtils() as db:
             return db.login(username, password)
 
