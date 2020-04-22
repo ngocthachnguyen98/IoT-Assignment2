@@ -1,6 +1,11 @@
 import MySQLdb
 
-# MISSING TRY/EXCEPT
+"""
+TO-DO:
+    - Missing try/except
+    - Add input validation scheme
+    - Flask API
+"""
 class DatabaseUtils:
     HOST = "35.244.95.33"
     USER = "root"
@@ -45,7 +50,7 @@ class DatabaseUtils:
                 # Execute and commit
                 cursor.execute(insert_stmt, data)
                 self.connection.commit()
-                print("Inserted...")
+                print("Registered...")
 
                 # Return True if insert successfully
                 return cursor.rowcount == 1
@@ -54,8 +59,19 @@ class DatabaseUtils:
             pass
 
 
-    def login(self, parameter_list):
-        pass
+    def login(self, username, password):
+        # Verify the username and password in the database
+        with self.connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM Users WHERE username=(%s) AND password=(%s)", (username, password))
+            queryResult = cursor.fetchall()
+
+        if not queryResult: # No row returned
+            print("Invalid credentials. Username / Password is incorrect.")
+            return False
+        else: # Row found
+            print("Welcome {}! You logged in.".format(username))
+            return True
+
     
     def showAllUnbookedCars(self, parameter_list):
         pass
