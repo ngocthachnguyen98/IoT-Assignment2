@@ -26,8 +26,12 @@ class Menu:
                     self.register()
             elif(selection == "2"): # Login
                 with DatabaseUtils() as db:
+                    # To login faster with use1, uncomment the line below:
+                    self.user_id = 6
+
                     # Set user ID for better query in other tables
-                    self.user_id = self.login()
+                    # self.user_id = self.login()
+                    
                     print("Your user_id is set: {}".format(self.user_id))
 
                     if self.user_id != None:
@@ -62,9 +66,7 @@ class Menu:
                 print()
                 break
             elif(selection == "3"): # Show unbooked car
-                print("--- Show unbooked car ---")
-                print()
-                break
+                                
             elif(selection == "4"): # Car search
                 print("--- Car search ---")
                 print()
@@ -114,6 +116,19 @@ class Menu:
 
                     print("{:<15} {:<30} {}".format(row[2], begin_time, return_time)) # Display Car ID, Begin and Return Time
         
+    def showAllUnbookedCar(self):
+        print("--- All unbooked cars ---")
+
+        with DatabaseUtils() as db:
+            unbooked_cars = db.getAllUnbookedCars()
+
+            if not unbooked_cars:
+                print("All cars are booked.")
+            else:
+                print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<15} {}".format("Car ID", "Make", "Body type", "Colour", "Seats", "Location", "Cost per hour (AUD)"))
+
+                for row in unbooked_cars:
+                    print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<15} {}".format(row[0], row[1], row[2], row[3], row[4], row[5], row[6]) 
 
 if __name__ == "__main__":
     Menu().main()

@@ -73,8 +73,15 @@ class DatabaseUtils:
             return queryResult[0]
 
     
-    def showAllUnbookedCars(self, parameter_list):
-        pass
+    def getAllUnbookedCars(self):
+        with self.connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM Cars WHERE booked=False")
+            queryResult = cursor.fetchall()
+
+        if not queryResult: # No row returned
+            return None
+        else: # Row found
+            return queryResult
     
     def searchCar(self, parameter_list):
         pass
@@ -88,7 +95,6 @@ class DatabaseUtils:
     def getUserHistory(self, user_id):
         with self.connection.cursor() as cursor:
             cursor.execute("SELECT * FROM Histories WHERE user_id=%(user_id)s", {'user_id': user_id})
-            # cursor.execute("SELECT * FROM Histories WHERE user_id=1")
             queryResult = cursor.fetchall()
         
         if not queryResult: # No row returned
