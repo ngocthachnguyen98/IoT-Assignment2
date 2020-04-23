@@ -20,17 +20,17 @@ class Menu:
 
             if(selection == "1"): # Register
                 with DatabaseUtils() as db:
-                    # To skip prompting, uncomment the line below:
-                    #db.register("user100", "pw100", "user100@carshare.com", "Thach", "Nguyen", "Customer")
+                    # To skip registration prompting, uncomment the line below:
+                    #db.register("user200", "pw200", "user200@carshare.com", "Tyler", "Newyen", "Customer")
                     
                     self.register()
             elif(selection == "2"): # Login
                 with DatabaseUtils() as db:
                     # To login faster with use1, uncomment the line below:
-                    self.user_id = 6
+                    # self.user_id = 6
 
                     # Set user ID for better query in other tables
-                    # self.user_id = self.login()
+                    self.user_id = self.login()
 
                     print("Your user_id is set: {}".format(self.user_id))
 

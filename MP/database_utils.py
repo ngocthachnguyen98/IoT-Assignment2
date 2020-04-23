@@ -1,4 +1,5 @@
 import MySQLdb
+from passlib.hash import sha256_crypt
 
 """
 TO-DO:
@@ -40,12 +41,15 @@ class DatabaseUtils:
             print("The username and email DO NOT EXIST. Can be used for registration")
             
             with self.connection.cursor() as cursor:
+                # Hash password
+                hashed_password = sha256_crypt.hash(password)
+
                 # Preparing insert query
                 insert_stmt = (
                     "INSERT INTO Users (username, password, email, fname, lname, role)"
                     "VALUES (%s, %s, %s, %s, %s, %s)"
                 )
-                data = (username, password, email, fname, lname, role)
+                data = (username, hashed_password, email, fname, lname, role)
 
                 # Execute and commit
                 cursor.execute(insert_stmt, data)
@@ -62,15 +66,23 @@ class DatabaseUtils:
     def login(self, username, password):
         # Verify the username and password in the database
         with self.connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM Users WHERE username=(%s) AND password=(%s)", (username, password))
+            # Retrive hashed/stored password for verification from the entered username
+            cursor.execute("SELECT id, password FROM Users WHERE username=(%s)", (username,))
             queryResult = cursor.fetchone()
 
         if not queryResult: # No row returned
-            print("Invalid credentials. Username / Password is incorrect.")
+            print("Invalid credentials. Username DOES NOT EXIST.")
             return None
         else: # Row found
-            print("Welcome {}! You logged in.".format(username))
-            return queryResult[0]
+            stored_password = queryResult[1]
+            verified = sha256_crypt.verify(password, stored_password)
+
+            if verified:
+                print("Welcome {}! You logged in.".format(username))
+                return queryResult[0] # Return user ID
+            else:
+                print("Invalid credentials. Wrong password.")
+                return None # Return no user ID
 
     
     def getAllUnbookedCars(self):
