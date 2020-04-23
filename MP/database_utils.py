@@ -63,14 +63,14 @@ class DatabaseUtils:
         # Verify the username and password in the database
         with self.connection.cursor() as cursor:
             cursor.execute("SELECT * FROM Users WHERE username=(%s) AND password=(%s)", (username, password))
-            queryResult = cursor.fetchall()
+            queryResult = cursor.fetchone()
 
         if not queryResult: # No row returned
             print("Invalid credentials. Username / Password is incorrect.")
-            return False
+            return None
         else: # Row found
             print("Welcome {}! You logged in.".format(username))
-            return True
+            return queryResult[0]
 
     
     def showAllUnbookedCars(self, parameter_list):
@@ -85,8 +85,16 @@ class DatabaseUtils:
     def cancelABooking(self, parameter_list):
         pass
     
-    def showUserHistory(self, parameter_list):
-        pass
+    def getUserHistory(self, user_id):
+        with self.connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM Histories WHERE user_id=%(user_id)s", {'user_id': user_id})
+            # cursor.execute("SELECT * FROM Histories WHERE user_id=1")
+            queryResult = cursor.fetchall()
+        
+        if not queryResult: # No row returned
+            return None
+        else: # Row found
+            return queryResult
     
     """PART B"""
     def showCarLocations(self, parameter_list):

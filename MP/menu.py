@@ -1,6 +1,10 @@
 from database_utils import DatabaseUtils
+from datetime import datetime
 
 class Menu:
+
+    user_id = None
+
     def main(self):
         self.runMenu1()
 
@@ -14,22 +18,24 @@ class Menu:
             selection = input("Select an option: ")
             print()
 
-            if(selection == "1"):
+            if(selection == "1"): # Register
                 with DatabaseUtils() as db:
                     # To skip prompting, uncomment the line below:
                     #db.register("user100", "pw100", "user100@carshare.com", "Thach", "Nguyen", "Customer")
                     
                     self.register()
-            elif(selection == "2"):
+            elif(selection == "2"): # Login
                 with DatabaseUtils() as db:
-                    logged_in = self.login()
+                    # Set user ID for better query in other tables
+                    self.user_id = self.login()
+                    print("Your user_id is set: {}".format(self.user_id))
 
-                    if logged_in:
+                    if self.user_id != None:
                         self.runMenu2()
                     else:
                         print("Re-run Menu 1...")
-            elif(selection == "0"):
-                print("Goodbye!")
+            elif(selection == "0"): # Quit app
+                print("--- Goodbye! ---")
                 break
             else:
                 print("Invalid input - please try again.")
@@ -47,27 +53,25 @@ class Menu:
             selection = input("Select an option: ")
             print()
 
-            if(selection == "1"):
+            if(selection == "1"): # Make a booking
                 print("--- Make a Booking ---")
                 print()
                 break
-            elif(selection == "2"):
+            elif(selection == "2"): # Cancel a booking
                 print("--- Cancel a Booking ---")
                 print()
                 break
-            elif(selection == "3"):
+            elif(selection == "3"): # Show unbooked car
                 print("--- Show unbooked car ---")
                 print()
                 break
-            elif(selection == "4"):
+            elif(selection == "4"): # Car search
                 print("--- Car search ---")
                 print()
                 break
-            elif(selection == "5"):
-                print("--- View your history ---")
-                print()
-                break
-            elif(selection == "0"):
+            elif(selection == "5"): # View user history
+                self.viewUserHistory()
+            elif(selection == "0"): # Log out
                 print("--- Logged out! ---")
                 break
             else:
@@ -92,6 +96,24 @@ class Menu:
         
         with DatabaseUtils() as db:
             return db.login(username, password)
+
+    def viewUserHistory(self):
+        print("--- View your history ---")
+        
+        with DatabaseUtils() as db:
+            user_history = db.getUserHistory(self.user_id)
+
+            if not user_history: # No row returned
+                print("There is nothing to see in your histories.")
+            else: # Row(s) found
+                print("{:<15} {:<30} {}".format("Car ID", "Begin Time", "Return Time"))
+
+                for row in user_history:
+                    begin_time = row[3].strftime("%d/%m/%Y, %H:%M:%S") # Convert MySQL datetime type to Python string type
+                    return_time = row[4].strftime("%d/%m/%Y, %H:%M:%S") # Convert MySQL datetime type to Python string type
+
+                    print("{:<15} {:<30} {}".format(row[2], begin_time, return_time)) # Display Car ID, Begin and Return Time
+        
 
 if __name__ == "__main__":
     Menu().main()
