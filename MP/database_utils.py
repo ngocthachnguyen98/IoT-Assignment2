@@ -83,8 +83,37 @@ class DatabaseUtils:
         else: # Row found
             return queryResult
     
-    def searchCar(self, parameter_list):
-        pass
+    def searchCar(self, id, make, body_type, colour, seats, location, cost_per_hour):
+        with self.connection.cursor() as cursor:
+            # Preparing query
+            queryStmt = """SELECT * FROM Cars 
+                WHERE id = %(car_id)s 
+                OR make = %(make)s 
+                OR body_type = %(body_type)s 
+                OR colour = %(colour)s 
+                OR seats = %(seats)s 
+                OR location = %(location)s
+                OR cost_per_hour = %(cost_per_hour)s
+            """
+
+            filters = {
+                'car_id': car_id,
+                'make': make,
+                'body_type': body_type,
+                'colour': colour,
+                'seats': seats,
+                'location': location,
+                'cost_per_hour': cost_per_hour
+            }
+
+            # Execute car search
+            cursor.execute(queryStmt, filters)
+            queryResult = cursor.fetchall()
+        
+        if not queryResult: # No row returned
+            return None
+        else: # Row found
+            return queryResult
     
     def makeABooking(self, parameter_list):
         pass

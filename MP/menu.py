@@ -68,9 +68,7 @@ class Menu:
             elif(selection == "3"): # Show unbooked car
                 self.showAllUnbookedCar()           
             elif(selection == "4"): # Car search
-                print("--- Car search ---")
-                print()
-                break
+                self.searchCar()
             elif(selection == "5"): # View user history
                 self.viewUserHistory()
             elif(selection == "0"): # Log out
@@ -99,6 +97,29 @@ class Menu:
         with DatabaseUtils() as db:
             return db.login(username, password)
 
+    def searchCar(self):
+        print("--- Car search ---")
+        car_id = input("Enter car ID for filtering: ")
+        make = input("Enter make for filtering: ")
+        body_type = input("Enter body type for filtering: ")
+        colour = input("Enter colour for filtering: ")
+        seats = input("Enter number of seats for filtering: ")
+        location = input("Enter location for filtering: ")
+        cost_per_hour = input("Enter cost per hour (in AUD) for filtering: ")
+
+        with DatabaseUtils() as db:
+            search_result = db.searchCar(car_id, make, body_type, colour, seats, location, cost_per_hour)
+            print("--- Search result ---")
+
+            if not search_result: # No row returned
+                print("No car found with your entered filters.")
+            else: # Row(s) found
+                print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<30} {:<15} {}".format("Car ID", "Make", "Body type", "Colour", "Seats", "Location", "Cost per hour (AUD)", "Booked"))
+
+                for row in search_result:
+                    print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<30} {:<15} {}".format(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]))
+
+    
     def viewUserHistory(self):
         print("--- View your history ---")
         
