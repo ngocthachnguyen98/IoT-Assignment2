@@ -114,10 +114,10 @@ class Menu:
             if not search_result: # No row returned
                 print("No car found with your entered filters.")
             else: # Row(s) found
-                print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<30} {:<15} {}".format("Car ID", "Make", "Body type", "Colour", "Seats", "Location", "Cost per hour (AUD)", "Booked"))
+                print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<30} {:<30} {}".format("Car ID", "Make", "Body type", "Colour", "Seats", "Location", "Cost per hour (AUD)", "Booked"))
 
                 for row in search_result:
-                    print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<30} {:<15} {}".format(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]))
+                    print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<30} {:<30} {}".format(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]))
 
     
     def viewUserHistory(self):
@@ -146,10 +146,10 @@ class Menu:
             if not unbooked_cars: # No row returned
                 print("All cars are booked.")
             else: # Row(s) found
-                print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<30} {}".format("Car ID", "Make", "Body type", "Colour", "Seats", "Location", "Cost per hour (AUD)"))
+                print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<40} {}".format("Car ID", "Make", "Body type", "Colour", "Seats", "Location", "Cost per hour (AUD)"))
 
                 for row in unbooked_cars:
-                    print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<30} {}".format(row[0], row[1], row[2], row[3], row[4], row[5], row[6])) 
+                    print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<40} {}".format(row[0], row[1], row[2], row[3], row[4], row[5], row[6])) 
 
 if __name__ == "__main__":
     Menu().main()

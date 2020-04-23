@@ -83,7 +83,7 @@ class DatabaseUtils:
         else: # Row found
             return queryResult
     
-    def searchCar(self, id, make, body_type, colour, seats, location, cost_per_hour):
+    def searchCar(self, car_id, make, body_type, colour, seats, location, cost_per_hour):
         with self.connection.cursor() as cursor:
             # Preparing query
             queryStmt = """SELECT * FROM Cars 
