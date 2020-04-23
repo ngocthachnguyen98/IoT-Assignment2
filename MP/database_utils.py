@@ -63,14 +63,15 @@ class DatabaseUtils:
         # Verify the username and password in the database
         with self.connection.cursor() as cursor:
             cursor.execute("SELECT * FROM Users WHERE username=(%s) AND password=(%s)", (username, password))
-            queryResult = cursor.fetchall()
+            queryResult = cursor.fetchone()
 
         if not queryResult: # No row returned
             print("Invalid credentials. Username / Password is incorrect.")
-            return False
+            return None
         else: # Row found
             print("Welcome {}! You logged in.".format(username))
-            return True
+            print(queryResult["id"])
+            return queryResult["id"]
 
     
     def showAllUnbookedCars(self, parameter_list):

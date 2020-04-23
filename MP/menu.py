@@ -1,6 +1,9 @@
 from database_utils import DatabaseUtils
 
 class Menu:
+
+    user_id = None
+
     def main(self):
         self.runMenu1()
 
@@ -22,9 +25,9 @@ class Menu:
                     self.register()
             elif(selection == "2"):
                 with DatabaseUtils() as db:
-                    logged_in = self.login()
+                    self.user_id = self.login()
 
-                    if logged_in:
+                    if self.user_id != None:
                         self.runMenu2()
                     else:
                         print("Re-run Menu 1...")
