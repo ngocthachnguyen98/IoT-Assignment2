@@ -70,8 +70,7 @@ class DatabaseUtils:
             return None
         else: # Row found
             print("Welcome {}! You logged in.".format(username))
-            print(queryResult["id"])
-            return queryResult["id"]
+            return queryResult[0]
 
     
     def showAllUnbookedCars(self, parameter_list):

@@ -25,14 +25,16 @@ class Menu:
                     self.register()
             elif(selection == "2"):
                 with DatabaseUtils() as db:
+                    # Set user ID for better query in other tables
                     self.user_id = self.login()
+                    print("Your user_id is set: {}".format(self.user_id))
 
                     if self.user_id != None:
                         self.runMenu2()
                     else:
                         print("Re-run Menu 1...")
             elif(selection == "0"):
-                print("Goodbye!")
+                print("--- Goodbye! ---")
                 break
             else:
                 print("Invalid input - please try again.")
