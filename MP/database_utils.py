@@ -1,4 +1,4 @@
-import MySQLdb
+import MySQLdb, datetime
 
 """
 TO-DO:
@@ -7,10 +7,10 @@ TO-DO:
     - Flask API
 """
 class DatabaseUtils:
-    HOST = "35.244.95.33"
+    HOST = "35.201.22.156"
     USER = "root"
     PASSWORD = "password"
-    DATABASE = "Carshare"
+    DATABASE = "carshare"
 
     def __init__(self, connection = None):
         if(connection == None):
@@ -73,17 +73,35 @@ class DatabaseUtils:
             return queryResult[0]
 
     
-    def showAllUnbookedCars(self, parameter_list):
-        pass
+    def showAllUnbookedCars(self, booked=0):
+        with self.connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM Cars WHERE booked=(%s)", (booked))
+            queryResult = cursor.fetchall()
     
-    def searchCar(self, parameter_list):
-        pass
+    def searchCar(self, car_id):
+        with self.connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM Cars WHERE id=(%s)", (car_id))
+            queryResult = cursor.fetchall()
     
-    def makeABooking(self, parameter_list):
-        pass
+    def makeABooking(self, user_id, car_id, begin_time=datetime.datetime.now(), return_time=None, ongoing=1):
+        
+        # Check if user_id already exist
+        with self.connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM Bookings WHERE user_id=(%s)", (user_id))
+            queryResult = cursor.fetchall()
+        
+        if not queryResult:
+            print("The user_id DOES NOT EXIST. Can be used for booking")
+            with self.connection.cursor() as cursor:
+               
+                cursor.execute("INSERT INTO Bookings (user_id, car_id, begin_time, return_time, ongoing) VALUES (%s %s %s %s %s)", (user_id, car_id, begin_time, return_time, ongoing))#adds booking to bookings table
+                cursor.execute("UPDATE Cars SET booked = 1 WHERE car_id = (%s)",(car_id)) #sets the value of the car to booked: booked = 1 
+                self.connection.commit()
+                print("Booked!")
+                return cursor.rowcount == 1
+        else:        
+             print("The user_id ALREADY EXISTS. Can't be used for booking")
     
-    def cancelABooking(self, parameter_list):
-        pass
     
     def getUserHistory(self, user_id):
         with self.connection.cursor() as cursor:
