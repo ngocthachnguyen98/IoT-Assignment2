@@ -7,10 +7,10 @@ TO-DO:
     - Flask API
 """
 class DatabaseUtils:
-    HOST = "35.201.22.156"
+    HOST = "35.244.95.33"
     USER = "root"
     PASSWORD = "password"
-    DATABASE = "carshare"
+    DATABASE = "Carshare"
 
     def __init__(self, connection = None):
         if(connection == None):
@@ -73,17 +73,24 @@ class DatabaseUtils:
             return queryResult[0]
 
     
-    def showAllUnbookedCars(self, booked=0):
+    def showAllUnbookedCars(self, booked=False):
         with self.connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM Cars WHERE booked=(%s)", (booked))
+            cursor.execute("SELECT * FROM Cars WHERE booked=(%s)", {booked})
             queryResult = cursor.fetchall()
+
+            for rows in queryResult:
+                print(rows)
+                
     
     def searchCar(self, car_id):
         with self.connection.cursor() as cursor:
             cursor.execute("SELECT * FROM Cars WHERE id=(%s)", (car_id))
             queryResult = cursor.fetchall()
+
+            for rows in queryResult:
+                print(rows)
     
-    def makeABooking(self, user_id, car_id, begin_time=datetime.datetime.now(), return_time=None, ongoing=1):
+    def makeABooking(self, user_id, car_id, begin_time=datetime.datetime.now(), return_time=None, ongoing=True):
         
         # Check if user_id already exist
         with self.connection.cursor() as cursor:
@@ -99,11 +106,12 @@ class DatabaseUtils:
                 self.connection.commit()
                 print("Booked!")
                 return cursor.rowcount == 1
+                
         else:        
              print("The user_id ALREADY EXISTS. Can't be used for booking")
     
-
-    def cancelABooking(self, user_id, car_id, begin_time):
+    def cancelABooking(self, user_id, car_id, begin_time): 
+        # Check if user_id already exist
         with self.connection.cursor() as cursor:
             cursor.execute("SELECT * FROM Bookings WHERE user_id=(%s)", (user_id))
             queryResult = cursor.fetchall()
@@ -112,12 +120,12 @@ class DatabaseUtils:
             print("The user_id DOES NOT EXIST. Can be cancelled")
            
         else:        
-             with self.connection.cursor() as cursor:
+            with self.connection.cursor() as cursor:
                
-                cursor.execute("DELETE FROM Bookings (user_id, car_id, begin_time) VALUES (%s %s %s)", (user_id, car_id, begin_time))#deletes booking from bookings table
-                cursor.execute("UPDATE Cars SET booked = 0 WHERE car_id = (%s)",(car_id)) #sets the value of the car to booked: booked = 0 
-                self.connection.commit()
-                print("Cancelled!")
+            cursor.execute("DELETE FROM Bookings (user_id, car_id, begin_time) VALUES (%s %s %s)", (user_id, car_id, begin_time)) # Deletes booking from bookings table
+            cursor.execute("UPDATE Cars SET booked = 0 WHERE car_id = (%s)",(car_id)) # Sets the value of the car to booked: booked = 0 
+            self.connection.commit()
+            print("Cancelled!")
                 
     
     def getUserHistory(self, user_id):
