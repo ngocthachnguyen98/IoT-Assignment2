@@ -6,9 +6,11 @@ class Menu:
     user_id = None
 
     def main(self):
-        self.runMenu1()
+        
+         self.runMenu1()
 
     def runMenu1(self):
+        
         while(True):
             print()
             print("MENU 1")
@@ -55,12 +57,12 @@ class Menu:
 
             if(selection == "1"): # Make a booking
                 print("--- Make a Booking ---")
-                print()
-                break
+                self.makeABooking()
+                
             elif(selection == "2"): # Cancel a booking
                 print("--- Cancel a Booking ---")
-                print()
-                break
+                self.cancelABooking()
+                
             elif(selection == "3"): # Show unbooked car
                 print("--- Show unbooked car ---")
                 print()
@@ -113,6 +115,39 @@ class Menu:
                     return_time = row[4].strftime("%d/%m/%Y, %H:%M:%S") # Convert MySQL datetime type to Python string type
 
                     print("{:<15} {:<30} {}".format(row[2], begin_time, return_time)) # Display Car ID, Begin and Return Time
+
+    
+    def makeABooking(self):
+        print("Unbooked cars are shown below: ")
+        with DatabaseUtils() as db:
+            db.showAllUnbookedCars()
+        
+        print("Enter Details below: ")
+        user_id = self.user_id
+        car_id = int(input("Enter a car_id which is the first item as seen from the car list: "))
+        
+        begin_time = input("Enter the date and time in format ex. 2011-04-12 03:00:00  : ")
+        converted_begin_time = datetime.strptime(begin_time, "%Y-%m-%d %H:%M:%S")
+        return_time = input("Enter the date and time in format ex. 2011-04-12 03:00:00  : ")
+        converted_return_time = datetime.strptime(return_time, "%Y-%m-%d %H:%M:%S")
+        ongoing = False
+
+        with DatabaseUtils() as db:
+            db.makeABooking(user_id, car_id, converted_begin_time, converted_return_time, ongoing)
+
+
+    def cancelABooking(self):
+        user_id = int(input("Enter user id: "))
+        car_id = int(input("Enter car id: "))
+        begin_time =  input("Enter the date and time in format ex. 2011-04-12 03:00:00  : ")
+        converted_begin_time = datetime.strptime(begin_time, "%Y-%m-%d %H:%M:%S")
+
+        with DatabaseUtils() as db:
+            db.cancelABooking(user_id, car_id, converted_begin_time) 
+
+
+
+
         
 
 if __name__ == "__main__":

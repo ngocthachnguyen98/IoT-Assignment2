@@ -9,7 +9,7 @@ TO-DO:
 class DatabaseUtils:
     HOST = "35.201.22.156"
     USER = "root"
-    PASSWORD = "password"
+    PASSWORD = "fahim"
     DATABASE = "carshare"
 
     def __init__(self, connection = None):
@@ -73,17 +73,24 @@ class DatabaseUtils:
             return queryResult[0]
 
     
-    def showAllUnbookedCars(self, booked=0):
+    def showAllUnbookedCars(self, booked=False):
         with self.connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM Cars WHERE booked=(%s)", (booked))
+            cursor.execute("SELECT * FROM Cars WHERE booked=(%s)", {booked})
             queryResult = cursor.fetchall()
+
+            for rows in queryResult:
+                print(rows)
+                
     
     def searchCar(self, car_id):
         with self.connection.cursor() as cursor:
             cursor.execute("SELECT * FROM Cars WHERE id=(%s)", (car_id))
             queryResult = cursor.fetchall()
+
+            for rows in queryResult:
+                print(rows)
     
-    def makeABooking(self, user_id, car_id, begin_time=datetime.datetime.now(), return_time=None, ongoing=1):
+    def makeABooking(self, user_id, car_id, begin_time=datetime.datetime.now(), return_time=None, ongoing=True):
         
         # Check if user_id already exist
         with self.connection.cursor() as cursor:
@@ -99,6 +106,7 @@ class DatabaseUtils:
                 self.connection.commit()
                 print("Booked!")
                 return cursor.rowcount == 1
+                
         else:        
              print("The user_id ALREADY EXISTS. Can't be used for booking")
     
