@@ -6,7 +6,6 @@ class Menu:
     user_id = None
 
     def main(self):
-        
          self.runMenu1()
 
     def runMenu1(self):
@@ -29,7 +28,8 @@ class Menu:
             elif(selection == "2"): # Login
                 with DatabaseUtils() as db:
                     # Set user ID for better query in other tables
-                    self.user_id = self.login()
+                    # self.user_id = self.login()
+                    self.user_id = 1
                     print("Your user_id is set: {}".format(self.user_id))
 
                     if self.user_id != None:
@@ -56,10 +56,8 @@ class Menu:
             print()
 
             if(selection == "1"): # Make a booking
-                print("--- Make a Booking ---")
                 self.makeABooking()
             elif(selection == "2"): # Cancel a booking
-                print("--- Cancel a Booking ---")
                 self.cancelABooking()
             elif(selection == "3"): # Show unbooked car
                 print("--- Show unbooked car ---")
@@ -116,13 +114,14 @@ class Menu:
 
     
     def makeABooking(self):
-        print("Unbooked cars are shown below: ")
+        print("--- Make a Booking ---")
+
+        print("Unbooked cars are shown below for the user to choose: ")
         with DatabaseUtils() as db:
             db.showAllUnbookedCars()
         
-        print("Enter Details below: ")
-        user_id = self.user_id
-        car_id = int(input("Enter a car_id which is the first item as seen from the car list: "))
+        print("Booking Details: ")
+        car_id = int(input("Enter a car ID: "))
         
         begin_time = input("Enter the date and time in format ex. 2011-04-12 03:00:00  : ")
         converted_begin_time = datetime.strptime(begin_time, "%Y-%m-%d %H:%M:%S")
@@ -131,17 +130,16 @@ class Menu:
         ongoing = False
 
         with DatabaseUtils() as db:
-            db.makeABooking(user_id, car_id, converted_begin_time, converted_return_time, ongoing)
+            db.makeABooking(self.user_id, car_id, converted_begin_time, converted_return_time, ongoing)
 
 
     def cancelABooking(self):
-        user_id = int(input("Enter user ID: "))
+        print("--- Cancel a Booking ---")
         car_id = int(input("Enter car ID: "))
         begin_time =  input("Enter the date and time of the booking (YYYY-MM-DD HH:MM:SS): ")
-        # converted_begin_time = datetime.strptime(begin_time, "%Y-%m-%d %H:%M:%S")
 
         with DatabaseUtils() as db:
-            db.cancelABooking(user_id, car_id, converted_begin_time) 
+            db.cancelABooking(self.user_id, car_id, begin_time) 
 
 
 

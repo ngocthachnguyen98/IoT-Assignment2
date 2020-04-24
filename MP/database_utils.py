@@ -111,21 +111,28 @@ class DatabaseUtils:
              print("The user_id ALREADY EXISTS. Can't be used for booking")
     
     def cancelABooking(self, user_id, car_id, begin_time): 
-        # Check if user_id already exist
-        with self.connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM Bookings WHERE user_id=(%s)", (user_id))
-            queryResult = cursor.fetchall()
+        """To Fahim, I'm not sure the purpose of this code, so I commented out. Sorry"""
+        # # Check if user_id already exist
+        # with self.connection.cursor() as cursor:
+        #     cursor.execute("SELECT * FROM Bookings WHERE user_id=(%s)", (user_id))
+        #     queryResult = cursor.fetchall()
         
-        if not queryResult:
-            print("The user_id DOES NOT EXIST. Can be cancelled")
-           
-        else:        
-            with self.connection.cursor() as cursor:
-               
-            cursor.execute("DELETE FROM Bookings (user_id, car_id, begin_time) VALUES (%s %s %s)", (user_id, car_id, begin_time)) # Deletes booking from bookings table
-            cursor.execute("UPDATE Cars SET booked = 0 WHERE car_id = (%s)",(car_id)) # Sets the value of the car to booked: booked = 0 
+        # if not queryResult:
+        #     print("The user_id DOES NOT EXIST. Can be cancelled")
+        # else:    
+        #     
+        with self.connection.cursor() as cursor:
+            # Delete the targeted booking from Bookings table
+            cursor.execute("DELETE FROM Bookings WHERE user_id=(%s) AND car_id=(%s) AND begin_time=(%s)", (user_id, car_id, begin_time))
+            deleted_row_count = cursor.rowcount
+            print("Deleted {} row from Bookings table".format(deleted_row_count))
+
+            # Update car's availability
+            cursor.execute("UPDATE Cars SET booked = False WHERE id =%(car_id)s", {'car_id': car_id})
+            updated_row_count = cursor.rowcount
+            print("Updated {} row in Cars table".format(updated_row_count))
+            
             self.connection.commit()
-            print("Cancelled!")
                 
     
     def getUserHistory(self, user_id):
