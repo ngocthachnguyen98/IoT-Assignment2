@@ -158,7 +158,8 @@ class Menu:
         car_id = int(input("Enter a car ID: "))
         begin_time =  input("Enter the beginning date and time of the booking (YYYY-MM-DD HH:MM:SS): ")
         return_time =  input("Enter the end date and time of the booking (YYYY-MM-DD HH:MM:SS): ")
-
+        print()
+        
         # Add new booking to the database
         with DatabaseUtils() as db:
             db.makeABooking(self.user_id, car_id, begin_time, return_time)
@@ -169,7 +170,8 @@ class Menu:
         # Prompt for input
         car_id = int(input("Enter car ID: "))
         begin_time =  input("Enter the beginning date and time of the booking (YYYY-MM-DD HH:MM:SS): ")
-
+        print()
+        
         # Remove booking from the database
         with DatabaseUtils() as db:
             db.cancelABooking(self.user_id, car_id, begin_time)

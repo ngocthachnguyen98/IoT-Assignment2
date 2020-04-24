@@ -127,7 +127,7 @@ class DatabaseUtils:
             # Add new booking to the database
             cursor.execute("INSERT INTO Bookings (user_id, car_id, begin_time, return_time, ongoing) VALUES (%s, %s, %s, %s, False)", (user_id, car_id, begin_time, return_time))#adds booking to bookings table
             inserted_row_count = cursor.rowcount
-            print("Inserted {} row in Cars table".format(inserted_row_count))
+            print("Inserted {} row in Bookings table".format(inserted_row_count))
 
             # Update car's availability
             cursor.execute("UPDATE Cars SET booked = True WHERE id = %(car_id)s", {'car_id': car_id})
@@ -150,6 +150,7 @@ class DatabaseUtils:
             print("Updated {} row in Cars table".format(updated_row_count))
             
             self.connection.commit()
+            print("Cancelling Completed...")
     
     def getUserHistory(self, user_id):
         with self.connection.cursor() as cursor:
