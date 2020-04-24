@@ -102,10 +102,26 @@ class DatabaseUtils:
         else:        
              print("The user_id ALREADY EXISTS. Can't be used for booking")
     
+
+    def cancelABooking(self, user_id, car_id, begin_time):
+        with self.connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM Bookings WHERE user_id=(%s)", (user_id))
+            queryResult = cursor.fetchall()
+        
+        if not queryResult:
+            print("The user_id DOES NOT EXIST. Can be cancelled")
+           
+        else:        
+             with self.connection.cursor() as cursor:
+               
+                cursor.execute("DELETE FROM Bookings (user_id, car_id, begin_time) VALUES (%s %s %s)", (user_id, car_id, begin_time))#deletes booking from bookings table
+                cursor.execute("UPDATE Cars SET booked = 0 WHERE car_id = (%s)",(car_id)) #sets the value of the car to booked: booked = 0 
+                self.connection.commit()
+                print("Cancelled!")
+                
     
     def getUserHistory(self, user_id):
         with self.connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM Histories WHERE user_id=%(user_id)s", {'user_id': user_id})
             # cursor.execute("SELECT * FROM Histories WHERE user_id=1")
             queryResult = cursor.fetchall()
         
