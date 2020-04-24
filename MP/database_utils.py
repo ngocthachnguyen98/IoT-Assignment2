@@ -130,7 +130,7 @@ class DatabaseUtils:
             print("Inserted {} row in Cars table".format(inserted_row_count))
 
             # Update car's availability
-            cursor.execute("UPDATE Cars SET booked = False WHERE id = %(car_id)s", {'car_id': car_id})
+            cursor.execute("UPDATE Cars SET booked = True WHERE id = %(car_id)s", {'car_id': car_id})
             updated_row_count = cursor.rowcount
             print("Updated {} row in Cars table".format(updated_row_count))
             
