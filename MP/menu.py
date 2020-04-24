@@ -26,7 +26,7 @@ class Menu:
                     self.register()
             elif(selection == "2"): # Login
                 with DatabaseUtils() as db:
-                    # To login faster with use1, uncomment the line below:
+                    # To login faster with user1, uncomment the line below:
                     # self.user_id = 6
 
                     # Set user ID for better query in other tables
@@ -60,9 +60,7 @@ class Menu:
             if(selection == "1"): # Make a booking
                 self.makeABooking()
             elif(selection == "2"): # Cancel a booking
-                print("--- Cancel a Booking ---")
-                print()
-                break
+                self.cancelABooking()
             elif(selection == "3"): # Show unbooked car
                 self.showAllUnbookedCar()           
             elif(selection == "4"): # Car search
@@ -164,6 +162,17 @@ class Menu:
         # Add new booking to the database
         with DatabaseUtils() as db:
             db.makeABooking(self.user_id, car_id, begin_time, return_time)
+
+    def cancelABooking(self):
+        print("--- Cancel a Booking ---")
+
+        # Prompt for input
+        car_id = int(input("Enter car ID: "))
+        begin_time =  input("Enter the beginning date and time of the booking (YYYY-MM-DD HH:MM:SS): ")
+
+        # Remove booking from the database
+        with DatabaseUtils() as db:
+            db.cancelABooking(self.user_id, car_id, begin_time)
 
 if __name__ == "__main__":
     Menu().main()
