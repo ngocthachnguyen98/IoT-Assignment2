@@ -110,7 +110,7 @@ class DatabaseUtils:
             queryResult = cursor.fetchall()
         
         if not queryResult:
-            print("The user_id DOES NOT EXIST. Can be cancelled")
+            print("The user_id DOES NOT EXIST. Cannot be cancelled")
            
         else:        
              with self.connection.cursor() as cursor:
