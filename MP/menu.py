@@ -122,15 +122,17 @@ class Menu:
         
         print("Booking Details: ")
         car_id = int(input("Enter a car ID: "))
-        
-        begin_time = input("Enter the date and time in format ex. 2011-04-12 03:00:00  : ")
-        converted_begin_time = datetime.strptime(begin_time, "%Y-%m-%d %H:%M:%S")
-        return_time = input("Enter the date and time in format ex. 2011-04-12 03:00:00  : ")
-        converted_return_time = datetime.strptime(return_time, "%Y-%m-%d %H:%M:%S")
-        ongoing = False
+        begin_time =  input("Enter the beginning date and time of the booking (YYYY-MM-DD HH:MM:SS): ")
+        return_time =  input("Enter the end date and time of the booking (YYYY-MM-DD HH:MM:SS): ")
+        # begin_time = input("Enter the date and time in format ex. 2011-04-12 03:00:00  : ")
+        # converted_begin_time = datetime.strptime(begin_time, "%Y-%m-%d %H:%M:%S")
+        # return_time = input("Enter the date and time in format ex. 2011-04-12 03:00:00  : ")
+        # converted_return_time = datetime.strptime(return_time, "%Y-%m-%d %H:%M:%S")
+        # ongoing = False
 
         with DatabaseUtils() as db:
-            db.makeABooking(self.user_id, car_id, converted_begin_time, converted_return_time, ongoing)
+            # db.makeABooking(self.user_id, car_id, converted_begin_time, converted_return_time, ongoing)
+            db.makeABooking(self.user_id, car_id, begin_time, return_time)
 
 
     def cancelABooking(self):

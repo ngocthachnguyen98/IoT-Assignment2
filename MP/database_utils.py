@@ -90,25 +90,35 @@ class DatabaseUtils:
             for rows in queryResult:
                 print(rows)
     
-    def makeABooking(self, user_id, car_id, begin_time=datetime.datetime.now(), return_time=None, ongoing=True):
+    def makeABooking(self, user_id, car_id, begin_time, return_time):
+        """To Fahim, I'm not sure the purpose of this code, so I commented out. Sorry"""
+        # with self.connection.cursor() as cursor:
+        #     cursor.execute("SELECT * FROM Bookings WHERE user_id=(%s)", (user_id))
+        #     queryResult = cursor.fetchall()
         
-        # Check if user_id already exist
-        with self.connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM Bookings WHERE user_id=(%s)", (user_id))
-            queryResult = cursor.fetchall()
-        
-        if not queryResult:
-            print("The user_id DOES NOT EXIST. Can be used for booking")
-            with self.connection.cursor() as cursor:
-               
-                cursor.execute("INSERT INTO Bookings (user_id, car_id, begin_time, return_time, ongoing) VALUES (%s %s %s %s %s)", (user_id, car_id, begin_time, return_time, ongoing))#adds booking to bookings table
-                cursor.execute("UPDATE Cars SET booked = 1 WHERE car_id = (%s)",(car_id)) #sets the value of the car to booked: booked = 1 
-                self.connection.commit()
-                print("Booked!")
-                return cursor.rowcount == 1
+        # if not queryResult:
+        #     print("The user_id DOES NOT EXIST. Can be used for booking")
+        #     with self.connection.cursor() as cursor:
+        #         cursor.execute("INSERT INTO Bookings (user_id, car_id, begin_time, return_time, ongoing) VALUES (%s %s %s %s %s)", (user_id, car_id, begin_time, return_time, ongoing))#adds booking to bookings table
+        #         cursor.execute("UPDATE Cars SET booked = 1 WHERE car_id = (%s)",(car_id)) #sets the value of the car to booked: booked = 1 
+        #         self.connection.commit()
+        #         print("Booked!")
+        #         return cursor.rowcount == 1
                 
-        else:        
-             print("The user_id ALREADY EXISTS. Can't be used for booking")
+        # else:        
+        #      print("The user_id ALREADY EXISTS. Can't be used for booking")
+        with self.connection.cursor() as cursor:
+            # Add new booking to the database
+            cursor.execute("INSERT INTO Bookings (user_id, car_id, begin_time, return_time, ongoing) VALUES (%s, %s, %s, %s, False)", (user_id, car_id, begin_time, return_time))#adds booking to bookings table
+            
+            # Update car's availability
+            cursor.execute("UPDATE Cars SET booked = False WHERE id = %(car_id)s", {'car_id': car_id})
+            updated_row_count = cursor.rowcount
+            print("Updated {} row in Cars table".format(updated_row_count))
+            
+            self.connection.commit()
+            print("Booked!")
+            return cursor.rowcount == 1
     
     def cancelABooking(self, user_id, car_id, begin_time): 
         """To Fahim, I'm not sure the purpose of this code, so I commented out. Sorry"""
@@ -128,7 +138,7 @@ class DatabaseUtils:
             print("Deleted {} row from Bookings table".format(deleted_row_count))
 
             # Update car's availability
-            cursor.execute("UPDATE Cars SET booked = False WHERE id =%(car_id)s", {'car_id': car_id})
+            cursor.execute("UPDATE Cars SET booked = False WHERE id = %(car_id)s", {'car_id': car_id})
             updated_row_count = cursor.rowcount
             print("Updated {} row in Cars table".format(updated_row_count))
             
