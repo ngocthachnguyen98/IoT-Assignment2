@@ -58,9 +58,7 @@ class Menu:
             print()
 
             if(selection == "1"): # Make a booking
-                print("--- Make a Booking ---")
-                print()
-                break
+                self.makeABooking()
             elif(selection == "2"): # Cancel a booking
                 print("--- Cancel a Booking ---")
                 print()
@@ -113,13 +111,12 @@ class Menu:
 
             if not search_result: # No row returned
                 print("No car found with your entered filters.")
-            else: # Row(s) found
+            else: # Row(s) found - Display search result
                 print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<30} {:<30} {}".format("Car ID", "Make", "Body type", "Colour", "Seats", "Location", "Cost per hour (AUD)", "Booked"))
 
                 for row in search_result:
                     print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<30} {:<30} {}".format(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]))
 
-    
     def viewUserHistory(self):
         print("--- View your history ---")
         
@@ -128,7 +125,7 @@ class Menu:
 
             if not user_history: # No row returned
                 print("There is nothing to see in your histories.")
-            else: # Row(s) found
+            else: # Row(s) found - Display user history
                 print("{:<15} {:<30} {}".format("Car ID", "Begin Time", "Return Time"))
 
                 for row in user_history:
@@ -145,11 +142,28 @@ class Menu:
 
             if not unbooked_cars: # No row returned
                 print("All cars are booked.")
-            else: # Row(s) found
+            else: # Row(s) found - Display list of unbooked cars
                 print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<40} {}".format("Car ID", "Make", "Body type", "Colour", "Seats", "Location", "Cost per hour (AUD)"))
 
                 for row in unbooked_cars:
                     print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<40} {}".format(row[0], row[1], row[2], row[3], row[4], row[5], row[6])) 
+
+    def makeABooking(self):
+        print("--- Make a Booking ---")
+        
+        # Show a list of unbooked cars, so that the user can choose from
+        self.showAllUnbookedCar()
+        print()
+
+        # Prompt for input
+        print("Please enter your booking details below")
+        car_id = int(input("Enter a car ID: "))
+        begin_time =  input("Enter the beginning date and time of the booking (YYYY-MM-DD HH:MM:SS): ")
+        return_time =  input("Enter the end date and time of the booking (YYYY-MM-DD HH:MM:SS): ")
+
+        # Add new booking to the database
+        with DatabaseUtils() as db:
+            db.makeABooking(self.user_id, car_id, begin_time, return_time)
 
 if __name__ == "__main__":
     Menu().main()
