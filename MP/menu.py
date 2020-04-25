@@ -20,14 +20,18 @@ class Menu:
 
             if(selection == "1"): # Register
                 with DatabaseUtils() as db:
-                    # To skip prompting, uncomment the line below:
-                    #db.register("user100", "pw100", "user100@carshare.com", "Thach", "Nguyen", "Customer")
+                    # To skip registration prompting, uncomment the line below:
+                    #db.register("user200", "pw200", "user200@carshare.com", "Tyler", "Newyen", "Customer")
                     
                     self.register()
             elif(selection == "2"): # Login
                 with DatabaseUtils() as db:
+                    # To login faster with use1, uncomment the line below:
+                    # self.user_id = 6
+
                     # Set user ID for better query in other tables
                     self.user_id = self.login()
+
                     print("Your user_id is set: {}".format(self.user_id))
 
                     if self.user_id != None:
@@ -62,13 +66,9 @@ class Menu:
                 print()
                 break
             elif(selection == "3"): # Show unbooked car
-                print("--- Show unbooked car ---")
-                print()
-                break
+                self.showAllUnbookedCar()           
             elif(selection == "4"): # Car search
-                print("--- Car search ---")
-                print()
-                break
+                self.searchCar()
             elif(selection == "5"): # View user history
                 self.viewUserHistory()
             elif(selection == "0"): # Log out
@@ -97,6 +97,29 @@ class Menu:
         with DatabaseUtils() as db:
             return db.login(username, password)
 
+    def searchCar(self):
+        print("--- Car search ---")
+        car_id = input("Enter car ID for filtering: ")
+        make = input("Enter make for filtering: ")
+        body_type = input("Enter body type for filtering: ")
+        colour = input("Enter colour for filtering: ")
+        seats = input("Enter number of seats for filtering: ")
+        location = input("Enter location for filtering: ")
+        cost_per_hour = input("Enter cost per hour (in AUD) for filtering: ")
+
+        with DatabaseUtils() as db:
+            search_result = db.searchCar(car_id, make, body_type, colour, seats, location, cost_per_hour)
+            print("--- Search result ---")
+
+            if not search_result: # No row returned
+                print("No car found with your entered filters.")
+            else: # Row(s) found
+                print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<30} {:<30} {}".format("Car ID", "Make", "Body type", "Colour", "Seats", "Location", "Cost per hour (AUD)", "Booked"))
+
+                for row in search_result:
+                    print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<30} {:<30} {}".format(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]))
+
+    
     def viewUserHistory(self):
         print("--- View your history ---")
         
@@ -114,6 +137,19 @@ class Menu:
 
                     print("{:<15} {:<30} {}".format(row[2], begin_time, return_time)) # Display Car ID, Begin and Return Time
         
+    def showAllUnbookedCar(self):
+        print("--- All unbooked cars ---")
+
+        with DatabaseUtils() as db:
+            unbooked_cars = db.getAllUnbookedCars()
+
+            if not unbooked_cars: # No row returned
+                print("All cars are booked.")
+            else: # Row(s) found
+                print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<40} {}".format("Car ID", "Make", "Body type", "Colour", "Seats", "Location", "Cost per hour (AUD)"))
+
+                for row in unbooked_cars:
+                    print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<40} {}".format(row[0], row[1], row[2], row[3], row[4], row[5], row[6])) 
 
 if __name__ == "__main__":
     Menu().main()

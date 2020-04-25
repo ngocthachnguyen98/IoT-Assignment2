@@ -1,4 +1,5 @@
 import MySQLdb
+from passlib.hash import sha256_crypt
 
 """
 TO-DO:
@@ -40,12 +41,15 @@ class DatabaseUtils:
             print("The username and email DO NOT EXIST. Can be used for registration")
             
             with self.connection.cursor() as cursor:
+                # Hash password
+                hashed_password = sha256_crypt.hash(password)
+
                 # Preparing insert query
                 insert_stmt = (
                     "INSERT INTO Users (username, password, email, fname, lname, role)"
                     "VALUES (%s, %s, %s, %s, %s, %s)"
                 )
-                data = (username, password, email, fname, lname, role)
+                data = (username, hashed_password, email, fname, lname, role)
 
                 # Execute and commit
                 cursor.execute(insert_stmt, data)
@@ -62,22 +66,66 @@ class DatabaseUtils:
     def login(self, username, password):
         # Verify the username and password in the database
         with self.connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM Users WHERE username=(%s) AND password=(%s)", (username, password))
+            # Retrive hashed/stored password for verification from the entered username
+            cursor.execute("SELECT id, password FROM Users WHERE username=(%s)", (username,))
             queryResult = cursor.fetchone()
 
         if not queryResult: # No row returned
-            print("Invalid credentials. Username / Password is incorrect.")
+            print("Invalid credentials. Username DOES NOT EXIST.")
             return None
         else: # Row found
-            print("Welcome {}! You logged in.".format(username))
-            return queryResult[0]
+            stored_password = queryResult[1]
+            verified = sha256_crypt.verify(password, stored_password)
+
+            if verified:
+                print("Welcome {}! You logged in.".format(username))
+                return queryResult[0] # Return user ID
+            else:
+                print("Invalid credentials. Wrong password.")
+                return None # Return no user ID
 
     
-    def showAllUnbookedCars(self, parameter_list):
-        pass
+    def getAllUnbookedCars(self):
+        with self.connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM Cars WHERE booked=False")
+            queryResult = cursor.fetchall()
+
+        if not queryResult: # No row returned
+            return None
+        else: # Row found
+            return queryResult
     
-    def searchCar(self, parameter_list):
-        pass
+    def searchCar(self, car_id, make, body_type, colour, seats, location, cost_per_hour):
+        with self.connection.cursor() as cursor:
+            # Preparing query
+            queryStmt = """SELECT * FROM Cars 
+                WHERE id = %(car_id)s 
+                OR make = %(make)s 
+                OR body_type = %(body_type)s 
+                OR colour = %(colour)s 
+                OR seats = %(seats)s 
+                OR location = %(location)s
+                OR cost_per_hour = %(cost_per_hour)s
+            """
+
+            filters = {
+                'car_id': car_id,
+                'make': make,
+                'body_type': body_type,
+                'colour': colour,
+                'seats': seats,
+                'location': location,
+                'cost_per_hour': cost_per_hour
+            }
+
+            # Execute car search
+            cursor.execute(queryStmt, filters)
+            queryResult = cursor.fetchall()
+        
+        if not queryResult: # No row returned
+            return None
+        else: # Row found
+            return queryResult
     
     def makeABooking(self, parameter_list):
         pass
@@ -88,7 +136,6 @@ class DatabaseUtils:
     def getUserHistory(self, user_id):
         with self.connection.cursor() as cursor:
             cursor.execute("SELECT * FROM Histories WHERE user_id=%(user_id)s", {'user_id': user_id})
-            # cursor.execute("SELECT * FROM Histories WHERE user_id=1")
             queryResult = cursor.fetchall()
         
         if not queryResult: # No row returned
