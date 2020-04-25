@@ -4,7 +4,6 @@ from passlib.hash import sha256_crypt
 """
 TO-DO:
     - Missing try/except
-    - Add input validation scheme
     - Flask API
 """
 class DatabaseUtils:
@@ -55,12 +54,8 @@ class DatabaseUtils:
                 cursor.execute(insert_stmt, data)
                 self.connection.commit()
                 print("Registered...")
-
-                # Return True if insert successfully
-                return cursor.rowcount == 1
         else: 
             print("The username or email ALREADY EXISTS. Can't be used for registration")
-            pass
 
 
     def login(self, username, password):
@@ -127,11 +122,35 @@ class DatabaseUtils:
         else: # Row found
             return queryResult
     
-    def makeABooking(self, parameter_list):
-        pass
+    def makeABooking(self, user_id, car_id, begin_time, return_time):
+        with self.connection.cursor() as cursor:
+            # Add new booking to the database
+            cursor.execute("INSERT INTO Bookings (user_id, car_id, begin_time, return_time, ongoing) VALUES (%s, %s, %s, %s, False)", (user_id, car_id, begin_time, return_time))#adds booking to bookings table
+            inserted_row_count = cursor.rowcount
+            print("Inserted {} row in Bookings table".format(inserted_row_count))
+
+            # Update car's availability
+            cursor.execute("UPDATE Cars SET booked = True WHERE id = %(car_id)s", {'car_id': car_id})
+            updated_row_count = cursor.rowcount
+            print("Updated {} row in Cars table".format(updated_row_count))
+            
+            self.connection.commit()
+            print("Booking Completed...")
     
-    def cancelABooking(self, parameter_list):
-        pass
+    def cancelABooking(self, user_id, car_id, begin_time):
+        with self.connection.cursor() as cursor:
+            # Delete the targeted booking from Bookings table
+            cursor.execute("DELETE FROM Bookings WHERE user_id=(%s) AND car_id=(%s) AND begin_time=(%s)", (user_id, car_id, begin_time))
+            deleted_row_count = cursor.rowcount
+            print("Deleted {} row from Bookings table".format(deleted_row_count))
+
+            # Update car's availability
+            cursor.execute("UPDATE Cars SET booked = False WHERE id = %(car_id)s", {'car_id': car_id})
+            updated_row_count = cursor.rowcount
+            print("Updated {} row in Cars table".format(updated_row_count))
+            
+            self.connection.commit()
+            print("Cancelling Completed...")
     
     def getUserHistory(self, user_id):
         with self.connection.cursor() as cursor:
