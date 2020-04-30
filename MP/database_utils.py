@@ -1,6 +1,6 @@
 import MySQLdb
 from passlib.hash import sha256_crypt
-from calander import insert_event_in_google_calander
+from calander import insert_event_in_google_calander, delete_event_in_google_calander
 
 """
 TO-DO:
@@ -129,10 +129,10 @@ class DatabaseUtils:
             'summary': 'booking reservation',
             'description': f'userId:{user_id} and carId:{car_id}',
             'start': {
-                'dateTime': begin_time.replace(' ', 'T') + 'Z',  # '2020-05-02T10:00:00Z'
+                'dateTime': begin_time.replace(' ', 'T') + '+10:00',  # '2020-05-02T10:00:00+10:00'
             },
             'end': {
-                'dateTime': return_time.replace(' ', 'T') + 'Z',
+                'dateTime': return_time.replace(' ', 'T') + '+10:00',
             },
             'attendees': [
                 {'email': f'user_{user_id}@gmail.com'},
@@ -157,11 +157,9 @@ class DatabaseUtils:
             self.connection.commit()
             print("Booking Completed...")
 
-
-
-
-
     def cancelABooking(self, user_id, car_id, begin_time):
+        delete_event_in_google_calander(user_id, car_id, begin_time)
+
         with self.connection.cursor() as cursor:
             # Delete the targeted booking from Bookings table
             cursor.execute("DELETE FROM Bookings WHERE user_id=(%s) AND car_id=(%s) AND begin_time=(%s)", (user_id, car_id, begin_time))
