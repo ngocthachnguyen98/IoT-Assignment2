@@ -1,5 +1,6 @@
 import MySQLdb
 from passlib.hash import sha256_crypt
+from calander import insert_event_in_google_calander
 
 """
 TO-DO:
@@ -7,15 +8,15 @@ TO-DO:
     - Flask API
 """
 class DatabaseUtils:
-    HOST = "35.244.95.33"
+    HOST = "35.189.49.199"
     USER = "root"
-    PASSWORD = "password"
-    DATABASE = "Carshare"
+    PASSWORD = "fahim"
+    DATABASE = "carshare"
 
     def __init__(self, connection = None):
         if(connection == None):
-            connection = MySQLdb.connect(DatabaseUtils.HOST, DatabaseUtils.USER,
-                DatabaseUtils.PASSWORD, DatabaseUtils.DATABASE)
+            connection = MySQLdb.connect(host=DatabaseUtils.HOST, user=DatabaseUtils.USER,
+                                         password=DatabaseUtils.PASSWORD, database=DatabaseUtils.DATABASE)
         self.connection = connection
     
     def __enter__(self):
@@ -123,6 +124,25 @@ class DatabaseUtils:
             return queryResult
     
     def makeABooking(self, user_id, car_id, begin_time, return_time):
+
+        event = {
+            'summary': 'booking reservation',
+            'description': f'userId:{user_id} and carId:{car_id}',
+            'start': {
+                'dateTime': begin_time.replace(' ', 'T') + 'Z',  # '2020-05-02T10:00:00Z'
+            },
+            'end': {
+                'dateTime': return_time.replace(' ', 'T') + 'Z',
+            },
+            'attendees': [
+                {'email': f'user_{user_id}@gmail.com'},
+            ],
+
+        }
+
+        insert_event_in_google_calander(event)
+
+
         with self.connection.cursor() as cursor:
             # Add new booking to the database
             cursor.execute("INSERT INTO Bookings (user_id, car_id, begin_time, return_time, ongoing) VALUES (%s, %s, %s, %s, False)", (user_id, car_id, begin_time, return_time))#adds booking to bookings table
@@ -136,7 +156,11 @@ class DatabaseUtils:
             
             self.connection.commit()
             print("Booking Completed...")
-    
+
+
+
+
+
     def cancelABooking(self, user_id, car_id, begin_time):
         with self.connection.cursor() as cursor:
             # Delete the targeted booking from Bookings table
