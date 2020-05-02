@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+    <head>
+        <title>Car Search Result</title>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <th>Car ID</th>
+                <th>Make</th>
+                <th>Body Type</th>
+                <th>Colour</th>
+                <th>Seats</th>
+                <th>Location</th>
+                <th>Cost per hour (AUD)</th>
+                <th>Booked</th>
+            </tr>
+            {% for car in cars %}
+                <tr>
+                    <td>{{car.id}}</td>
+                    <td>{{car.make}}</td>
+                    <td>{{car.body_type}}</td>
+                    <td>{{car.colour}}</td>
+                    <td>{{car.seats}}</td>
+                    <td>{{car.location}}</td>
+                    <td>{{car.cost_per_hour}}</td>
+                    <td>{{car.booked}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </body>
+    {% block content %}
+
+        <h2>Show flashed messages:</h2>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+                <h3>{{ message }}</h3>
+            {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+    {% endblock %}
+</html>
+
