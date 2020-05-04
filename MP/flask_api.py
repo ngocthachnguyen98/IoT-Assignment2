@@ -5,7 +5,7 @@ import os, requests, json
 from flask import current_app as app
 from passlib.hash import sha256_crypt
 from sqlalchemy import or_
-import calendar_for_api 
+import calendar_for_api  
 
 api = Blueprint("api", __name__)
 

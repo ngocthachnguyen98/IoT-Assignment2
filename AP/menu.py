@@ -1,6 +1,8 @@
-
+import client_AP
 
 class Menu:
+    user_id = None
+
     def main(self):
         self.runMenu1()
 
@@ -15,7 +17,10 @@ class Menu:
             print()
 
             if(selection == "1"): # Login with credentials
-                break
+                self.user_id = self.login()
+                
+                if self.user_id is not None: self.runMenu2
+                else: print("Invalid Credentials!")
             elif(selection == "2"): # Login with facial recognition
                 break
             elif(selection == "0"): # Quit app
@@ -26,6 +31,7 @@ class Menu:
 
     def runMenu2(self):
         while(True):
+            print("You logged in!")
             print()
             print("MENU 2")
             print("1. Unlock Car")
@@ -41,6 +47,10 @@ class Menu:
             else:
                 print("Invalid input - please try again.")
 
+    def login(self): # A user ID will be returned if validated
+        print("--- Login ---")
+        user_id = client_AP.credentialsCheck()
+        return user_id
 
 if __name__ == "__main__":
     Menu().main()
