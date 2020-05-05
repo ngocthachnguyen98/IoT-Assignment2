@@ -41,9 +41,15 @@ class Menu:
             print()
 
             if(selection == "1"): # Unlock car
-                break
+                unlocked = self.unlockCar()
+
+                if unlocked: print("Car Unlocked!")
+                else: print("Unlocking Failed!")
             elif(selection == "2"): # Lock car
-                break
+                locked = self.lockCar()
+
+                if unlocked: print("Car Locked!")
+                else: print("Locking Failed!")
             else:
                 print("Invalid input - please try again.")
 
@@ -51,6 +57,33 @@ class Menu:
         print("--- Login ---")
         user_id = client_AP.credentialsCheck()
         return user_id
+
+    def unlockCar(self):
+        print("--- Unlock Car ---")
+        user_id     = self.user_id
+        car_id      = input("Enter your car ID: ")
+        begin_time  = input("Enter your begin time (YYYY-MM-DD HH:MM:SS): ")
+
+        response = client_AP.unlockCar(user_id, car_id, begin_time)
+
+        if response:
+            return True
+        else: return False
+    
+
+    def lockCar(self):
+        print("--- Lock Car ---")
+        user_id     = self.user_id
+        car_id      = input("Enter your car ID: ")
+
+        
+        response = client_AP.lockCar(user_id, car_id)
+
+
+        if response:
+            return True
+        else: return False
+
 
 if __name__ == "__main__":
     Menu().main()

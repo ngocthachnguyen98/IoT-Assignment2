@@ -132,6 +132,17 @@ histories_schema = HistorySchema(many=True)
 
 # TESTED
 # Endpoint to register
+"""
+To register:
+    - Variables will be declared from the form data
+    - Username and email will be checked if they are taken
+    - If they are taken:
+        - User will be redirected to Registration page
+    - If they are not taken:
+        - The password will be hashed
+        - A new row will be declared (newUser) and added to Users table
+        - User will be redirected to Login page
+"""
 @api.route("/register", methods = ["GET", "POST"])
 def register():
     if request.method=="POST":
@@ -164,8 +175,9 @@ def register():
                             fname = fname, 
                             lname = lname, 
                             role = role)
-
             db.session.add(newUser)
+
+            # Commit changes
             db.session.commit()
 
             flash("You are registered and can now login","success")
@@ -176,6 +188,21 @@ def register():
 
 # TESTED
 # Endpoint to login 
+"""
+To login:
+    - Username will be checked in Users table to see if validated
+    - If the username does not exist:
+        - User will be redirected to Login page
+    - If the username exists:
+        - Stored password of that username will be retrieved
+        - Submitted password will be verified
+        - If verfied:
+            - User ID (session data) will be set
+            - User will be redirected to Home page
+        - If failing verification:
+            - User will be redirected to Login page
+    
+"""
 @api.route("/login", methods=["GET", "POST"])
 def login():
     if request.method=="POST":
@@ -210,6 +237,11 @@ def login():
 
 # TESTED
 # Endpoint to logout
+"""
+When the user logouts:
+    - User ID (session data) will be removed
+    - User will be redirected to Index page
+"""
 @api.route('/logout')
 def logout():
    # Remove the user ID from the session if it is there
@@ -220,6 +252,12 @@ def logout():
 
 # TESTED
 # Endpoint to view histories (user-specified)
+"""
+When the user chooses to view histories:
+    - User ID will be retrieved from session data
+    - Pass the User ID to the URL
+    - A query will be executed to return all the histories of the targeted user
+"""
 @api.route("/history/<user_id>", methods = ["GET"])
 def getUserHistories(user_id):
     histories = History.query.filter_by(user_id = user_id).all()
@@ -231,6 +269,9 @@ def getUserHistories(user_id):
 
 # TESTED
 # Endpoint to show all UNBOOKED cars
+"""
+All cars whose unbooked column set to False will be returned from the Cars table
+"""
 @api.route("/car/unbooked", methods = ["GET"])
 def getUnbookedCars():
     cars = Car.query.filter_by(booked = False).all()
@@ -242,6 +283,12 @@ def getUnbookedCars():
 
 # TESTED
 # Endpoint to search for cars
+"""
+To search for cars:
+    - Filters will be declared from form data
+    - A query with OR conditions will be executed to find the filtered cars
+    - The result will be displayed in Car Search Result page
+"""
 @api.route("/car/search", methods = ["GET", "POST"])
 def carSearch():
     if request.method=="POST":
@@ -270,6 +317,19 @@ def carSearch():
 
 # TESTED
 # Endpoint to make a booking
+"""
+To make a booking:
+    - Varibables will be declared from the form data
+    - Especially for begin/return time:
+        - HTML does not support input type Datetime
+        - So we use to 2 separated input types in the form data: date and time
+        - Variables begin_datetime and return_datetime will be a result of combining the inputs above (will be used for begin_time/return_time column in the Bookings table)
+    - A new row for the new booking will be created and added to the Bookings table
+    - The booked car's availability will be updated in the Cars table (booked column will be set to True)
+    - An event will be also created to add to the Google Calendar:
+        - Information about the User ID, Car ID, summary and duration of the event will be declared
+    - User will be redirected to the Home page after the booking is made
+"""
 @api.route("/booking/make", methods = ["GET", "POST"])
 def makeABooking():
     if request.method=="POST": # WARNING: using POST for update and insertion
@@ -324,6 +384,18 @@ def makeABooking():
 
 # TESTED
 # Endpoint to cancel a booking
+"""
+When the user chooses to cancel a booking:
+    - Variables will be declared from the form data
+    - Especially for begin time:
+        - HTML does not support input type Datetime
+        - So we use to 2 separated input types in the form data: date and time
+        - Variables begin_datetime will be a result of combining the inputs above (will be used for begin_time column in the Bookings table)
+    - A query will be executed to find right booking in the Bookings table and removed
+    - The booked car's availability will be updated in the Cars table (booked column will be set to False)
+    - An event will be also removed from the Google Calendar
+    - User will be redirected to the Home page after the booking is cancelled
+"""
 @api.route("/booking/cancel", methods = ["GET", "POST"])
 def cancelABooking():
     if request.method=="POST": # WARNING: using POST for update and deletion
@@ -362,11 +434,90 @@ def cancelABooking():
 
 
 # Endpoint to unlock a car
+"""
+When the user choose to unlock the car:
+- User ID, Car ID and booking begin time will be retrieved from the form data
+- Access Bookings table to find the right row, in order to see if the user provides the correct booking details
+- Set the ongoing status of the booking to True
+"""
+@api.route("/car/unlock", methods = ["PUT"])
+def unlockCar():
+    user_id     = request.form.get("user_id")
+    car_id      = request.form.get("car_id")
+    begin_time  = request.form.get("begin_time")
 
+    # Check if this is the right user with the right booked car and time 
+    booking = db.session.query(Booking).filter_by(  user_id = user_id,
+                                                    car_id = car_id,
+                                                    begin_time = begin_time).first()
+
+    # Activate booking
+    booking.ongoing = 1
+
+    # Commit changes
+    db.session.commit()
+
+    flash("Unlocked Car")
 
 
 # Endpoint to lock a car
+"""
+When the user choose to lock the car:
+    - User ID and Car ID will be retrieved from the form data
+    - The user can only lock the car if the booking status is ongoing, which means the car has been unlocked
+    - Access Bookings table to find the row which has the right User ID, Car ID and the ongoing status is True
+    - Begin and return time of the booking will be passed to specific variables (to be recorded in Histories table later)
+    - The target booking will be removed to indicate the booking has finished
+    - A record will be added to Histories table
+    - Car's availability will be updated in the Cars table
+"""
+@api.route("/car/lock", methods = ["PUT"])
+def lockCar():
+    user_id     = request.form.get("user_id")
+    car_id      = request.form.get("car_id")
 
+    # Find the booking
+    booking = db.session.query(Booking).filter_by(  user_id = user_id,
+                                                    car_id = car_id,
+                                                    ongoing = 1).first()
+    
+    begin_time = booking.begin_time
+    return_time = booking.return_time
+
+    # Record finished booking to History table
+    newHistory = History(   user_id = user_id,
+                            car_id = car_id,
+                            begin_time = begin_time,
+                            return_time = return_time)
+    db.session.add(newHistory)
+
+    # Remove record from Booking table
+    db.session.delete(booking)
+
+    # Update car's availability
+    car = Car.query.get(car_id) 
+    car.booked = False
+
+    # Commit changes
+    db.session.commit()
+
+    flash("Locked Car")
 
 
 # Endpoint to get car's location with Google Maps API
+"""
+The function will: 
+    - Access Cars table 
+    - Search for the car with the right id
+    - Get its location
+    - Define latitude and longitude variables 
+    - Use the varibles for the Google Map API to show its location
+"""
+@api.route("/car/location/<car_id>", methods = ["GET"])
+def showCarLocation(car_id):
+    # Get the targeted car and get its location (latitude and longitude)
+    car = Car.query.get(car_id) 
+    location = car.location
+
+    lat = location.split(", ")[0]
+    lng = location.split(", ")[1]
