@@ -11,6 +11,7 @@ import MySQLdb
 from flask_session import Session
 import socket, threading
 
+
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 Bootstrap(app)
@@ -42,11 +43,16 @@ TCP_PORT = 5000     # Port to listen on
 ADDRESS = (TCP_IP, TCP_PORT)
 
 def launchServer():
+    """This function is for launching the TCP server and starting to listen for connection from Agent Pi.
+    Once there is a connection, Master Pi will receive user's credentials to check for validity.
+
+    flask_main.checkCredentials(username, password) will be trigger to check with the database
+    """
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.bind(ADDRESS)
 
         # Listen for connection
-        s.listen(1)
+        s.listen()
         print("Listening on {}...".format(ADDRESS))
 
 
@@ -79,6 +85,17 @@ def launchServer():
     print("Done.")
 
 def checkCredentials(username, password):
+    """This function will check validity of the credentials sent from the Agent Pi.
+    A query will be executed on the Google Cloud SQL database to retrieve the data with the corresponding username.
+    If the username is found, the stored password will be verified with the submitted password from the Agent Pi
+
+    Arguments:
+        username {str} -- User's username
+        password {str} -- User's password
+
+    Returns:
+        int -- an User ID if validated. This ID will be sent back to the Agent Pi via TCP socket and can be used as a parameter when the user triggers unlock or lock the car function
+    """
     data = db.session.query(User.id, User.password).filter_by(username = username).first()
 
     if data is None: # If username does not exist

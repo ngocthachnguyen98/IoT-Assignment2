@@ -20,6 +20,7 @@ SCOPES = "https://www.googleapis.com/auth/calendar"
 store = file.Storage("token.json")
 creds = store.get()
 
+# Examine the credentials
 if(not creds or creds.invalid):
     flow = client.flow_from_clientsecrets("credentials.json", SCOPES)
     creds = tools.run_flow(flow, store)
@@ -28,10 +29,27 @@ service = build("calendar", "v3", http=creds.authorize(Http()))
 
 
 def insert(event):
+    """This function is for adding an event into the Google Calendar.
+    The event is created via flask_api.makeABooking() function.
+    The event is the booking that user has made when using the application.
+
+    Arguments:
+        event {dict} -- An Google Calendar event
+    """
     event = service.events().insert(calendarId = "primary", body = event).execute()
 
 
 def delete(user_id, car_id, begin_time):
+    """This function is for removing an event from the Google Calendar.
+    The event is created via flask_api.makeABooking() function and can be removed via flask_api.cancelABooking():
+        - From the current time, a list of the future events will be returned
+        - For each event in that list, they will be examined to find the correct event to remove based on the starting time and description
+
+    Arguments:
+        user_id {int} -- User ID of the user who makes the booking
+        car_id {int} -- Car ID of the car which has been booked
+        begin_time {datetime} -- The begining date and time of the booking
+    """
     # Get a list of events from the current time
     now = datetime.datetime.now().isoformat() + '+10:00'
     events = service.events().list( calendarId='primary', 
@@ -50,4 +68,3 @@ def delete(user_id, car_id, begin_time):
         if event['description'] == f'userId: {user_id} and carId: {car_id}' and event_start_time == begin_time:
             service.events().delete(calendarId='primary', 
                                     eventId=event['id']).execute() # Deletion
-            return
