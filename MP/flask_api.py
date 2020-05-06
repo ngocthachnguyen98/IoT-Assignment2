@@ -321,7 +321,7 @@ def logout():
         - User will be redirected to Index page
     """
 
-    # Remove the user ID from the session if it is there
+   # Remove the user ID from the session if it is there
     session.pop('user_id', None)
     flash("You are now logged out!", "danger")
     return redirect(url_for('site.index'))

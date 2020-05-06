@@ -4,3 +4,4 @@ MP/examples
 MP/users_seeder.py
 MP/credentials.json
 MP/token.json
+MP/flask_session
