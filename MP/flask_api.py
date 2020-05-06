@@ -322,9 +322,9 @@ def logout():
     """
 
    # Remove the user ID from the session if it is there
-   session.pop('user_id', None)
-   flash("You are now logged out!", "danger")
-   return redirect(url_for('site.index'))
+    session.pop('user_id', None)
+    flash("You are now logged out!", "danger")
+    return redirect(url_for('site.index'))
 
 
 # TESTED
