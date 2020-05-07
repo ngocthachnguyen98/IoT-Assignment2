@@ -582,6 +582,8 @@ def lockCar():
     car = Car.query.get(car_id) 
     car.booked = False
 
+    # TODO: Update car's location using Google Map API
+
     # Commit changes
     db.session.commit()
 
@@ -615,7 +617,7 @@ def apLogin():
     An User ID will be returned to the Agent Pi if successful.
 
     Returns:
-        int -- User ID if valid credentials. None for the otherwise
+        str -- User ID if valid credentials. None for the otherwise
     """
     username     = request.form.get("username")
     password     = request.form.get("password")
@@ -630,7 +632,7 @@ def apLogin():
 
         # Verify password
         if sha256_crypt.verify(password, stored_password): #Validated
-            return user_id
+            return str(user_id)
         else: # Invalidated
             return None
 

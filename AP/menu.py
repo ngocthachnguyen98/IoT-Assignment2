@@ -4,7 +4,7 @@ class Menu:
     """This class consists of 2 menus. One for logging in and the other one is for unlock/lock the car.
     Only when the user has logged in that he/she can unlock/lock the car in the second menu.
 
-    There is a variable called user_id, which will be set once the user logged in
+    There is a variable called user_id, which will be set once the user logged in. This is also a proof that the user is authenticated.
     """
     user_id = None
 
@@ -35,7 +35,9 @@ class Menu:
             if(selection == "1"): # Login with credentials
                 self.user_id = self.login()
                 
-                if self.user_id is not None: self.runMenu2()
+                if self.user_id is not None: 
+                    print("You logged in! Your user ID: {}".format(self.user_id))
+                    self.runMenu2()
                 else: print("Invalid Credentials!")
             elif(selection == "2"): # Login with facial recognition
                 break
@@ -77,6 +79,7 @@ class Menu:
                 else: print("Locking Failed!")
             elif(selection == "0"): # Log out
                 print("--- Logging out! ---")
+                self.user_id = None
                 break
             else:
                 print("Invalid input - please try again.")
@@ -119,7 +122,7 @@ class Menu:
         }
 
         # Send a request to Flask API
-        response = requests.put("http://{}:{}/car/unlock".format(HOST, PORT), data)
+        response = requests.put("http://127.0.0.1:5000/car/unlock", data)
 
 
         if response.status_code == 200:
@@ -150,8 +153,7 @@ class Menu:
         }
 
         # Send a request to Flask API
-        response = requests.put("http://{}:{}/car/lock".format(HOST, PORT), data)
-
+        response = requests.put("http://127.0.0.1:5000/car/lock", data)
 
         if response.status_code == 200:
             return True
