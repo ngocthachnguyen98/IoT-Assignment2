@@ -94,42 +94,69 @@ class Menu:
 
 
     def unlockCar(self):
-        """The function is for unlocking the booked car by triggering client_AP.unlockCar(user_id, car_id, begin_time).
+        """This function will make a request to unlock the car via the Flask API.
+        This function will trigger flask_api.unlockCar().
         User will be asked to enter the booked car ID and beginning time of the booking for verification in the Bookings table on the Google Cloud SQL Carshare datbase. The user_id is already set when the user logged in.
 
+        Arguments:
+            user_id {int} -- User ID of the user who has made the booking
+            car_id {int} -- Car ID of the booked car
+            begin_time {datetime} -- The beginning date and time of the booking
+
         Returns:
-            boolean -- True if the correct booking details are entered and the car is unlocked successfully. False for the otherwise.
+            boolean -- True if the car is successfully unlocked. False for the otherwise
         """
+
         print("--- Unlock Car ---")
         user_id     = self.user_id
         car_id      = input("Enter your car ID: ")
         begin_time  = input("Enter your begin time (YYYY-MM-DD HH:MM:SS): ")
+        
+        data = {
+            'user_id'   : user_id,
+            'car_id'    : car_id,
+            'begin_time': begin_time   
+        }
 
-        response = client_AP.unlockCar(user_id, car_id, begin_time)
+        # Send a request to Flask API
+        response = requests.put("http://{}:{}/car/unlock".format(HOST, PORT), data)
 
-        if response:
+
+        if response.status_code == 200:
             return True
-        else: return False
-    
+        elif response.status_code == 404:
+            return False
+
 
     def lockCar(self):
-        """The function is for unlocking the booked car by triggering client_AP.lockCar(user_id, car_id).
+        """This function will make a request to lock the car via the Flask API.
+        This function will trigger flask_api.lockCar().
         User will be asked to enter the booked car ID for verification in the Bookings table on the Google Cloud SQL Carshare datbase. The user_id is already set when the user logged in.
 
+        Arguments:
+            user_id {int} -- User ID of the user who has made the booking
+            car_id {int} -- Car ID of the booked car
+
         Returns:
-            boolean -- True if the correct booking details are entered and the car is locked successfully. False for the otherwise
+            boolean -- True if the car is successfully locked. False for the otherwise
         """
         print("--- Lock Car ---")
         user_id     = self.user_id
         car_id      = input("Enter your car ID: ")
 
-        
-        response = client_AP.lockCar(user_id, car_id)
+        data = {
+            'user_id'   : user_id,
+            'car_id'    : car_id
+        }
+
+        # Send a request to Flask API
+        response = requests.put("http://{}:{}/car/lock".format(HOST, PORT), data)
 
 
-        if response:
+        if response.status_code == 200:
             return True
-        else: return False
+        elif response.status_code == 404:
+            return False
 
 
 if __name__ == "__main__":
