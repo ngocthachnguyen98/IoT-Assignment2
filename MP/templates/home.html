@@ -1,7 +1,7 @@
 {% extends "bootstrap/base.html" %} {% block title %}This is an example page{%
 endblock %} {% block navbar %}
 <div class="navbar navbar-fixed-top">
-  <!-- ... -->
+  <input type="text" placeholder="Search Car..">
 </div>
 {% endblock %} 
 
@@ -16,20 +16,31 @@ endblock %} {% block navbar %}
       {% endfor %}
     {% endif %}
   {% endwith %}
-  
-{% endblock %}
 
-{% block content %}
   <h2>Available Cars:</h1>
 
   <table>
-    {%for car in cars%}
+    <tr>
+      <th>&emsp;&emsp;ID&emsp;</th>
+      <th>Make&emsp;&emsp;&emsp;</th>
+      <th>Body Type&emsp;&emsp;</th>
+      <th>Colour&emsp;&emsp;</th>
+      <th>Seats&emsp;&emsp;</th>
+      <th>Location&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</th>
+      <th>Cost Per Hour</th>
+  </tr>
+    {% for car in cars %}
       <tr>
-        <td>{{car.car_id}}</td>
-        <!-- <td>{{car.Name}}</td> -->
+        <td>&emsp;&emsp;{{car.id}}</td>
+        <td>{{car.make}}</td>
+        <td>{{car.body_type}}</td>
+        <td>{{car.colour}}</td>
+        <td>{{car.seats}}</td>
+        <td>{{car.location}}</td>
+        <td>{{car.cost_per_hour}}</td>
       </tr>
-    {%endfor%}
+    {% endfor %}
   </table>
-  
+  <button type = "submit" onClick="window.location='/booking/make'">Make a booking</button>
 {% endblock %}
 

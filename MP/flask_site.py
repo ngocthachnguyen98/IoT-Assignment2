@@ -49,7 +49,9 @@ def homePage():
     Returns:
         .html -- The Home page of the web application
     """
-    return render_template('home.html')
+    response = requests.get("http://127.0.0.1:5000/car/unbooked")
+    data = json.loads(response.text)
+    return render_template('home.html', cars = data)
 
 
 # Car Search page

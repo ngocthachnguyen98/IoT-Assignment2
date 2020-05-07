@@ -35,7 +35,7 @@ class Menu:
             if(selection == "1"): # Login with credentials
                 self.user_id = self.login()
                 
-                if self.user_id is not None: self.runMenu2
+                if self.user_id is not None: self.runMenu2()
                 else: print("Invalid Credentials!")
             elif(selection == "2"): # Login with facial recognition
                 break
