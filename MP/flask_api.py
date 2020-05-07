@@ -607,3 +607,29 @@ def showCarLocation(car_id):
     # Latitude and Longitude variables
     lat = location.split(", ")[0]
     lng = location.split(", ")[1]
+
+# Endpoint to check login credentials from Agent Pi
+@api.route("/ap_login", methods = ["POST"])
+def apLogin():
+    """This request comes from the TCP server (server_MP.py). Credentials are sent in form data to check the validty.
+    An User ID will be returned to the Agent Pi if successful.
+
+    Returns:
+        int -- User ID if valid credentials. None for the otherwise
+    """
+    username     = request.form.get("username")
+    password     = request.form.get("password")
+
+    data = db.session.query(User.id, User.password).filter_by(username = username).first()
+
+    if data is None: # If username does not exist
+        return None
+    else: # If username exists
+        user_id = data[0]
+        stored_password = data[1] 
+
+        # Verify password
+        if sha256_crypt.verify(password, stored_password): #Validated
+            return user_id
+        else: # Invalidated
+            return None
