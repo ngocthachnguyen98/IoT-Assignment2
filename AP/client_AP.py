@@ -6,7 +6,7 @@ import requests
 HOST = input("Enter IP address of Carshare server: ")
 
 # HOST = "0.0.0.0"    # The server's hostname or IP address
-PORT = 5000         # The port used by the server
+PORT = 5000       # The port used by the server
 ADDRESS = (HOST, PORT)
 
 def credentialsCheck():
