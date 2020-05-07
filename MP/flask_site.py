@@ -38,6 +38,8 @@ def loginPage():
     Returns:
         .html -- The Login page of the web application
     """
+    if request.method == 'POST':
+        return 'Submitted form.'
     return render_template('login.html')
 
 
