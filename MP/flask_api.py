@@ -519,7 +519,7 @@ def cancelABooking():
 @api.route("/car/unlock", methods = ["PUT"])
 def unlockCar():
     """
-    When the user choose to unlock the car:
+    When the user choose to unlock the car on Agent Pi and the request is send via TCP socket:
         - User ID, Car ID and booking begin time will be retrieved from the form data
         - Access Bookings table to find the right row, in order to see if the user provides the correct booking details
         - Set the ongoing status of the booking to True
@@ -542,12 +542,14 @@ def unlockCar():
 
     flash("Unlocked Car")
 
+    return "unlocked"
+
 
 # Endpoint to lock a car
 @api.route("/car/lock", methods = ["PUT"])
 def lockCar():
     """
-    When the user choose to lock the car:
+    When the user choose to lock the car on Agent Pi and the request is send via TCP socket:
         - User ID and Car ID will be retrieved from the form data
         - The user can only lock the car if the booking status is ongoing, which means the car has been unlocked
         - Access Bookings table to find the row which has the right User ID, Car ID and the ongoing status is True
@@ -589,6 +591,8 @@ def lockCar():
 
     flash("Locked Car")
 
+    return "locked"
+
 
 # Endpoint to get car's location with Google Maps API
 @api.route("/car/location/<car_id>", methods = ["GET"])
@@ -609,6 +613,7 @@ def showCarLocation(car_id):
     # Latitude and Longitude variables
     lat = location.split(", ")[0]
     lng = location.split(", ")[1]
+
 
 # Endpoint to check login credentials from Agent Pi
 @api.route("/ap_login", methods = ["POST"])

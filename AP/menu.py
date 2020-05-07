@@ -1,10 +1,12 @@
-import client_AP
+import client_TCP
 
 class Menu:
     """This class consists of 2 menus. One for logging in and the other one is for unlock/lock the car.
     Only when the user has logged in that he/she can unlock/lock the car in the second menu.
 
     There is a variable called user_id, which will be set once the user logged in. This is also a proof that the user is authenticated.
+    
+    This class imports client_TCP.py module to send messages to the TCP for specific request.
     """
     user_id = None
 
@@ -70,12 +72,12 @@ class Menu:
             if(selection == "1"): # Unlock car
                 unlocked = self.unlockCar()
 
-                if unlocked: print("Car Unlocked!")
+                if unlocked == "unlocked": print("Car Unlocked!")
                 else: print("Unlocking Failed!")
             elif(selection == "2"): # Lock car
                 locked = self.lockCar()
 
-                if unlocked: print("Car Locked!")
+                if locked == "locked": print("Car Locked!")
                 else: print("Locking Failed!")
             elif(selection == "0"): # Log out
                 print("--- Logging out! ---")
@@ -86,79 +88,35 @@ class Menu:
 
 
     def login(self):
-        """This function will trigger client_AP.credentialsCheck() and ask the user to enter their credentials to log in.
-
+        """This function will trigger client_TCP.credentialsCheck() and ask the user to enter their credentials to log in.
+        
         Returns:
             int -- an User ID if the credentials are valid and None if they are invalid
         """
         print("--- Login ---")
-        user_id = client_AP.credentialsCheck()
+        user_id = client_TCP.credentialsCheck()
         return user_id
 
 
     def unlockCar(self):
-        """This function will make a request to unlock the car via the Flask API.
-        This function will trigger flask_api.unlockCar().
-        User will be asked to enter the booked car ID and beginning time of the booking for verification in the Bookings table on the Google Cloud SQL Carshare datbase. The user_id is already set when the user logged in.
-
-        Arguments:
-            user_id {int} -- User ID of the user who has made the booking
-            car_id {int} -- Car ID of the booked car
-            begin_time {datetime} -- The beginning date and time of the booking
-
-        Returns:
-            boolean -- True if the car is successfully unlocked. False for the otherwise
-        """
-
-        print("--- Unlock Car ---")
-        user_id     = self.user_id
-        car_id      = input("Enter your car ID: ")
-        begin_time  = input("Enter your begin time (YYYY-MM-DD HH:MM:SS): ")
+        """This function will trigger client_TCP.unlockCar() and ask the user to enter their details to unlock.
         
-        data = {
-            'user_id'   : user_id,
-            'car_id'    : car_id,
-            'begin_time': begin_time   
-        }
-
-        # Send a request to Flask API
-        response = requests.put("http://127.0.0.1:5000/car/unlock", data)
-
-
-        if response.status_code == 200:
-            return True
-        elif response.status_code == 404:
-            return False
-
+        Returns:
+            str -- "unlocked" if successful
+        """
+        print("--- Unlock Car ---")
+        unlocked = client_TCP.unlockCar(self.user_id)
+        return unlocked
 
     def lockCar(self):
-        """This function will make a request to lock the car via the Flask API.
-        This function will trigger flask_api.lockCar().
-        User will be asked to enter the booked car ID for verification in the Bookings table on the Google Cloud SQL Carshare datbase. The user_id is already set when the user logged in.
-
-        Arguments:
-            user_id {int} -- User ID of the user who has made the booking
-            car_id {int} -- Car ID of the booked car
-
+        """This function will trigger client_TCP.lockCar() and ask the user to enter their details to lock.
+        
         Returns:
-            boolean -- True if the car is successfully locked. False for the otherwise
+            str -- "locked" if successful
         """
         print("--- Lock Car ---")
-        user_id     = self.user_id
-        car_id      = input("Enter your car ID: ")
-
-        data = {
-            'user_id'   : user_id,
-            'car_id'    : car_id
-        }
-
-        # Send a request to Flask API
-        response = requests.put("http://127.0.0.1:5000/car/lock", data)
-
-        if response.status_code == 200:
-            return True
-        elif response.status_code == 404:
-            return False
+        locked = client_TCP.lockCar(self.user_id)
+        return locked
 
 
 if __name__ == "__main__":
