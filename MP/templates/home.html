@@ -19,3 +19,17 @@ endblock %} {% block navbar %}
   
 {% endblock %}
 
+{% block content %}
+  <h2>Available Cars:</h1>
+
+  <table>
+    {%for car in cars%}
+      <tr>
+        <td>{{car.car_id}}</td>
+        <!-- <td>{{car.Name}}</td> -->
+      </tr>
+    {%endfor%}
+  </table>
+  
+{% endblock %}
+

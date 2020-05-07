@@ -607,3 +607,15 @@ def showCarLocation(car_id):
     # Latitude and Longitude variables
     lat = location.split(", ")[0]
     lng = location.split(", ")[1]
+@api.route("/home")
+def showAvaiCar():
+    """
+    The function will:
+        - Access Cars table
+        - Search for the cars that are currently available
+        - Get all of it attributes
+        - Put in the Flasked message to display in the template
+    """
+    cars = Car.query.filter_by(booked='False').all()
+    result = cars_schema.dump(cars)
+    return render_template('home.html')
