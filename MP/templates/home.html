@@ -1,12 +1,28 @@
 {% extends "bootstrap/base.html" %} {% block title %}This is an example page{%
 endblock %} {% block navbar %}
+<head>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
 <div class="navbar navbar-fixed-top">
+  <button type = "submit" onclick="window.location='/login'">Sign In</button>
 </div>
 {% endblock %} 
 
 {% block content %}
   <h1>Home Page</h1>
-
+  <!-- <script>
+    if (sessionStorage.getItem("user_id") != null){
+      alert(sessionStorage.getElementById("user_id"))
+      var cancel_booking = document.getElementById("cancel_booking");
+      var log_out = document.getElementById("log_out");
+      $("#cancel_booking").show();
+      log_out.style.display = "block";
+      console.log("user");
+    }
+    else{
+      console.log("No User");
+    }
+  </script> -->
   <h2>Show flashed messages:</h2>
   {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -41,6 +57,18 @@ endblock %} {% block navbar %}
     {% endfor %}
   </table>
   <button type = "submit" onClick="window.location='/car/search'">Search Your Car</button>
-  <button type = "submit" onClick="window.location='/booking/make'">Make a booking</button>
-
+  <button type = "submit" onClick="window.location='/booking/make'">Make a booking</button><br><br>
+  <button type = "submit" id = "cancel_booking" onClick="window.location='/booking/cancel'">Cancel a booking</button>
+  <button type = "submit" id = "log_out" onClick="window.location='/logout'">Log Out</button>
+  {% with user_id = session['user_id'] %}
+    {% if user_id %}
+      <script>
+        var cancel_booking = document.getElementById("cancel_booking");
+        var log_out = document.getElementById("log_out");
+        cancel_booking.style.display = "inline-block";
+        log_out.style.display = "inline-block";
+        console.log("user");
+      </script>
+    {% endif %}
+  {% endwith %}
 {% endblock %}
