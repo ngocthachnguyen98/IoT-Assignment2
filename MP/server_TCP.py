@@ -135,7 +135,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                     # Data handling - message = "unlock user_id car_id begin_time"
                     user_id     = message.decode().split()[1]
                     car_id      = message.decode().split()[2]
-                    begin_time  = message.decode().split()[3]
+                    begin_time  = message.decode().split(" ", 3)[3]
                     
                     # Trigger the right function to send request
                     reply = unlockCar(user_id, car_id, begin_time)
@@ -147,7 +147,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                     car_id      = message.decode().split()[2]
                     
                     # Trigger the right function to send request
-                    reply = unlockCar(user_id, car_id)
+                    reply = lockCar(user_id, car_id)
 
                 
                 print("Sending reply.")
