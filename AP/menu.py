@@ -106,30 +106,8 @@ class Menu:
             str -- "unlocked" if successful
         """
         print("--- Unlock Car ---")
-<<<<<<< HEAD
-        user_id     = self.user_id
-        car_id      = input("Enter your car ID: ")
-        begin_time  = input("Enter your begin time (YYYY-MM-DD HH:MM:SS): ")
-        
-        data = {
-            'user_id'   : user_id,
-            'car_id'    : car_id,
-            'begin_time': begin_time   
-        }
-
-        # Send a request to Flask API
-        response = requests.put("http://192.168.1.102:5000/car/unlock", data)
-
-
-        if response.status_code == 200:
-            return True
-        elif response.status_code == 404:
-            return False
-
-=======
         unlocked = client_TCP.unlockCar(self.user_id)
         return unlocked
->>>>>>> caeaa821de55ca7db988d1ef7af769d5c367ac4a
 
     def lockCar(self):
         """This function will trigger client_TCP.lockCar() and ask the user to enter their details to lock.
@@ -138,26 +116,8 @@ class Menu:
             str -- "locked" if successful
         """
         print("--- Lock Car ---")
-<<<<<<< HEAD
-        user_id     = self.user_id
-        car_id      = input("Enter your car ID: ")
-
-        data = {
-            'user_id'   : user_id,
-            'car_id'    : car_id
-        }
-
-        # Send a request to Flask API
-        response = requests.put("http://192.168.1.102:5000/car/lock", data)
-
-        if response.status_code == 200:
-            return True
-        elif response.status_code == 404:
-            return False
-=======
         locked = client_TCP.lockCar(self.user_id)
         return locked
->>>>>>> caeaa821de55ca7db988d1ef7af769d5c367ac4a
 
 
 if __name__ == "__main__":
