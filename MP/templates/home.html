@@ -10,19 +10,6 @@ endblock %} {% block navbar %}
 
 {% block content %}
   <h1>Home Page</h1>
-  <!-- <script>
-    if (sessionStorage.getItem("user_id") != null){
-      alert(sessionStorage.getElementById("user_id"))
-      var cancel_booking = document.getElementById("cancel_booking");
-      var log_out = document.getElementById("log_out");
-      $("#cancel_booking").show();
-      log_out.style.display = "block";
-      console.log("user");
-    }
-    else{
-      console.log("No User");
-    }
-  </script> -->
   <h2>Show flashed messages:</h2>
   {% with messages = get_flashed_messages() %}
     {% if messages %}
