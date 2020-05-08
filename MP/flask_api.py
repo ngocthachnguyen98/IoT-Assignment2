@@ -298,11 +298,11 @@ def login():
 
             # Verify password
             if sha256_crypt.verify(password, stored_password):
-                flash("You are now logged in!", "success")
+                # flash("You are now logged in!", "success")
 
                 # Set session data
                 session["user_id"] = user_id
-
+                session["username"] = username
                 return redirect(url_for('site.homePage'))
             else:
                 flash("Invalid Password!", "error")
@@ -323,6 +323,7 @@ def logout():
 
    # Remove the user ID from the session if it is there
     session.pop('user_id', None)
+    session.pop('username', None)
     flash("You are now logged out!", "danger")
     return redirect(url_for('site.index'))
 

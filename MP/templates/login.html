@@ -29,15 +29,17 @@ endblock %} {% block navbar %}
 
     <button class="btn btn-primary" type="submit">Submit</button>
   </form>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+        <h3>{{ message }}</h3>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  <br>
+  <h2>No user account yet?</h2>
+  <button class = "btn btn-primary" type = "submit" onclick="window.location='/register'">Sign Up</button>
 </div>
-
-<h2>Show flashed messages:</h2>
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    {% for message in messages %}
-      <h3>{{ message }}</h3>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
+<!-- <h2>Show flashed messages:</h2> -->
 
 {% endblock %}
