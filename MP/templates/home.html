@@ -1,7 +1,6 @@
 {% extends "bootstrap/base.html" %} {% block title %}This is an example page{%
 endblock %} {% block navbar %}
 <div class="navbar navbar-fixed-top">
-  <input type="text" placeholder="Search Car..">
 </div>
 {% endblock %} 
 
@@ -41,6 +40,7 @@ endblock %} {% block navbar %}
       </tr>
     {% endfor %}
   </table>
+  <button type = "submit" onClick="window.location='/car/search'">Search Your Car</button>
   <button type = "submit" onClick="window.location='/booking/make'">Make a booking</button>
-{% endblock %}
 
+{% endblock %}

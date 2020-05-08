@@ -1,4 +1,5 @@
 import client_AP
+import requests
 
 class Menu:
     """This class consists of 2 menus. One for logging in and the other one is for unlock/lock the car.
@@ -122,7 +123,7 @@ class Menu:
         }
 
         # Send a request to Flask API
-        response = requests.put("http://127.0.0.1:5000/car/unlock", data)
+        response = requests.put("http://192.168.1.102:5000/car/unlock", data)
 
 
         if response.status_code == 200:
@@ -153,7 +154,7 @@ class Menu:
         }
 
         # Send a request to Flask API
-        response = requests.put("http://127.0.0.1:5000/car/lock", data)
+        response = requests.put("http://192.168.1.102:5000/car/lock", data)
 
         if response.status_code == 200:
             return True
