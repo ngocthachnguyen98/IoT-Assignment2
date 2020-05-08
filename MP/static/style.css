@@ -1,3 +1,6 @@
 #cancel_booking, #log_out {
     display: none;
 }
+td, th {
+    vertical-align: middle;
+}
