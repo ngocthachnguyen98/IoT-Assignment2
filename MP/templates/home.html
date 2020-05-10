@@ -39,7 +39,7 @@ endblock %} {% block navbar %}
           <td>{{car.body_type}}</td>
           <td>{{car.colour}}</td>
           <td>{{car.seats}}</td>
-          <td>{{car.location}}</td>
+          <td><button type="submit" onClick="window.location='/car/location/{{car.id}}'">Click for Location</button></td>
           <td>{{car.cost_per_hour}}</td>
         </tr>
       {% endfor %}

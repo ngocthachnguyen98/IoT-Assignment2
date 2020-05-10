@@ -5,13 +5,16 @@ import os, requests, json
 from flask import current_app as app
 from passlib.hash import sha256_crypt
 from sqlalchemy import or_
-import calendar_for_api  
+import calendar_for_api
+from flask_googlemaps import GoogleMaps
+from flask_googlemaps import Map, icons
+from dynaconf import FlaskDynaconf
 
 api = Blueprint("api", __name__)
 
 db = SQLAlchemy() # for accessing database
 ma = Marshmallow() # for serializing objects
-
+# GoogleMaps
 
 # DECLARING THE MODELS
 
@@ -608,12 +611,21 @@ def showCarLocation(car_id):
     """
 
     # Get the targeted car and get its location (latitude and longitude)
+    car_id = car_id
     car = Car.query.get(car_id) 
     location = car.location
 
-    # Latitude and Longitude variables
-    lat = location.split(", ")[0]
-    lng = location.split(", ")[1]
+    mymap = Map(
+        identifier="view-side",  # for DOM element
+        varname="mymap",  # for JS object name
+        # Latitude and Longitude variables
+        lat = location.split(", ")[0],
+        lng = location.split(", ")[1],
+        markers=[(location.split(", ")[0], location.split(", ")[1])],
+    )
+    return render_template("car_location.html",
+        car_id=car_id,
+        mymap=mymap)
 
 
 # Endpoint to check login credentials from Agent Pi
@@ -641,4 +653,3 @@ def apLogin():
             return str(user_id)
         else: # Invalidated
             return None
-
