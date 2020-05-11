@@ -1,58 +1,64 @@
-{% extends "bootstrap/base.html" %} {% block title %}Home{% endblock %} {% block navbar %}
-
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">CarShare.co</a>
-            </div>
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="/home">Home</a></li>
-                <li><a href="/login">Sign In</a></li>
-                <li><a href="/register">Sign Up</a></li>
-            </ul>
-        </div>
-    </nav>
-    <div class="navbar navbar-fixed-top">
-        <input type="text" placeholder="Search Car..">
-    </div>
-{% endblock %}
+{% extends "bootstrap/base.html" %} {% block title %}This is an example page{%
+endblock %} {% block navbar %}
+<head>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+      <div class="navbar-header">
+          <a class="navbar-brand" href="#">CarShare.co</a>
+      </div>
+      <ul class="nav navbar-nav">
+          <li class="active"><a href="/home">Home</a></li>
+          <li><a href="/login">Sign In</a></li>
+          <li><a href="/register">Sign Up</a></li>
+      </ul>
+  </div>
+</nav>
+<div class="navbar navbar-fixed-top">
+  <!-- <button class="btn btn-primary" type = "submit" onclick="window.location='/login'" id = "login">Sign In</button> -->
+</div>
+{% endblock %} 
 
 {% block content %}
+  <div class = "container">
+    <br>
     <h1>Home Page</h1>
-
-    <h2>Show flashed messages:</h2>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <h3>{{ message }}</h3>
-            {% endfor %}
-        {% endif %}
+    {% with username = session['username'] %}
+      {% if username %}
+        <h2>Welcome, {{ username }}</h2>
+      {% else %}
+        <h2>You are signing in as an Anonymous User!</h2>
+      {% endif %}
     {% endwith %}
 
     <h2>Available Cars:</h2>
 
     <table>
+      <tr>
+        <th>&emsp;&emsp;ID&emsp;</th>
+        <th>Make&emsp;&emsp;&emsp;</th>
+        <th>Body Type&emsp;&emsp;</th>
+        <th>Colour&emsp;&emsp;</th>
+        <th>Seats&emsp;&emsp;</th>
+        <th>Location&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</th>
+        <th>Cost Per Hour</th>
+    </tr>
+      {% for car in cars %}
         <tr>
-            <th>&emsp;&emsp;ID&emsp;</th>
-            <th>Make&emsp;&emsp;&emsp;</th>
-            <th>Body Type&emsp;&emsp;</th>
-            <th>Colour&emsp;&emsp;</th>
-            <th>Seats&emsp;&emsp;</th>
-            <th>Location&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</th>
-            <th>Cost Per Hour</th>
+          <td>&emsp;&emsp;{{car.id}}</td>
+          <td>{{car.make}}</td>
+          <td>{{car.body_type}}</td>
+          <td>{{car.colour}}</td>
+          <td>{{car.seats}}</td>
+          <td><button type="submit" onClick="window.location='/car/location/{{car.id}}'">Click for Location</button></td>
+          <td>{{car.cost_per_hour}}</td>
         </tr>
-        {% for car in cars %}
-            <tr>
-                <td>&emsp;&emsp;{{ car.id }}</td>
-                <td>{{ car.make }}</td>
-                <td>{{ car.body_type }}</td>
-                <td>{{ car.colour }}</td>
-                <td>{{ car.seats }}</td>
-                <td>{{ car.location }}</td>
-                <td>{{ car.cost_per_hour }}</td>
-            </tr>
-        {% endfor %}
-    </table>
-    <button type="submit" onClick="window.location='/booking/make'">Make a booking</button>
+      {% endfor %}
+    </table><br>
+    <button class="btn btn-primary type = "submit" onClick="window.location='/car/search'">Search Your Car</button>
+    <button class="btn btn-primary type = "submit" onClick="window.location='/booking/make'">Make A Booking</button><br><br>
+    <button class="btn btn-primary type = "submit" onClick="window.location='/booking/cancel'">Cancel A Booking</button>
+    <button class="btn btn-primary type = "submit" onClick="window.location='/logout'">Sign Out</button>
+  </div>
 {% endblock %}
-

@@ -70,16 +70,16 @@
                 </div>
 
                 <button class="btn btn-primary btn-lg btn-block" type="submit">Submit</button>
-            </form>
-        </div>
-    </div>
-    <h2>Show flashed messages:</h2>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <h3>{{ message }}</h3>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+  </form>
+</div>
+
+<!-- <h2>Show flashed messages:</h2> -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+      <h3>{{ message }}</h3>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
 
 {% endblock %}
