@@ -60,11 +60,36 @@
             {% endfor %}
         </table>
         <br>
-        <button class="btn btn-primary" type="submit" onClick="window.location='/car/search'">Search Your Car</button>
-        <button class="btn btn-primary" type="submit" onClick="window.location='/booking/make'">Make A Booking</button>
-        <br><br>
-        <button class="btn btn-primary" type="submit" onClick="window.location='/booking/cancel'">Cancel A Booking
-        </button>
-        <button class="btn btn-primary" type="submit" onClick="window.location='/logout'">Sign Out</button>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <button class="btn btn-info btn-block" type="submit" onClick="window.location='/car/search'">Search
+                        Your
+                        Car
+                    </button>
+                </div>
+                <div class="col-sm">
+                    <button class="btn btn-primary btn-block" type="submit" onClick="window.location='/booking/make'">
+                        Make A
+                        Booking
+                    </button>
+                </div>
+                <div class="col-sm">
+                    <button class="btn btn-secondary btn-block" type="submit"
+                            onClick="window.location='/booking/cancel'">
+                        Cancel
+                        A Booking
+                    </button>
+                </div>
+                <div class="col-sm">
+                    <button class="btn btn-danger btn-block" type="submit" onClick="window.location='/logout'">Sign Out
+                    </button>
+                </div>
+
+
+            </div>
+        </div>
+
+
     </div>
 {% endblock %}
