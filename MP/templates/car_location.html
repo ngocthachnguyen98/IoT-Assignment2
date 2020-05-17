@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Show Car Location</title>
-        {{mymap.js}}
-    </head>
-    <body>
-        {% block content %}
-        <h2>Location of Car number {{car_id}}</h2>
-        {{mymap.html}}
-        {% endblock %} 
-    </body>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Show Car Location</title>
+    {{ mymap.js }}
+</head>
+<body>
+{% block content %}
+    <h2>Location of Car number {{ car_id }}</h2>
+    {{ mymap.html }}
+{% endblock %}
+</body>
 </html>
 
