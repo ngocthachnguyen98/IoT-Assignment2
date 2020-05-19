@@ -97,7 +97,7 @@ class TestDatabase(unittest.TestCase):
         body_type       = "Seden"
         colour          = "Black"
         seats           = "5"
-        location        = ""
+        location        = "-37.814, 144.96332"
         cost_per_hour   = "10.5"
 
         newCar = Car( make = make,
