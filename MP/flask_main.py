@@ -7,7 +7,7 @@ import os, requests, json
 from flask_api import api, db
 from flask_site import site
 from flask_bootstrap import Bootstrap
-import MySQLdb
+# import MySQLdb
 from flask_session import Session
 import socket, threading
 from flask_googlemaps import GoogleMaps

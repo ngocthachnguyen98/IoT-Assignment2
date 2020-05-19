@@ -1,12 +1,51 @@
-{% extends "bootstrap/base.html" %} {% block title %} IoT - CarShare Application{%
-endblock %} {% block navbar %}
-<div class="navbar navbar-fixed-top">
-  <a href="/login">Sign In</a>
-  <a href="/register">Sign Up</a>
-</div>
+{% extends "bootstrap/base.html" %}
+{% block title %} IoT - CarShare Application{% endblock %}
+{% block navbar %}
+    <nav class="navbar navbar-default justify-content-center">
+
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">CarShare.co</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/home">Home</a></li>
+                <li><a href="/login">Sign In</a></li>
+                <li><a href="/register">Sign Up</a></li>
+            </ul>
+
+    </nav>
 {% endblock %}
-{% block content %}
-<h2>Welcome to CarShare App</h2>
-<p>Proceed with Sign In or Sign Up</p>
+
+{% block header %}
+    <div id="demo" class="carousel slide" data-ride="carousel">
+
+        <!-- Indicators -->
+        <ul class="carousel-indicators">
+            <li data-target="#demo" data-slide-to="0" class="active"></li>
+            <li data-target="#demo" data-slide-to="1"></li>
+            <li data-target="#demo" data-slide-to="2"></li>
+        </ul>
+
+        <!-- The slideshow -->
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="static/images/Corolla.png" alt="Corolla">
+            </div>
+            <div class="carousel-item">
+                <img src="static/images/HondaCivic.png" alt="HondaCivic">
+            </div>
+            <div class="carousel-item">
+                <img src="static/images/HondaSedan.png" alt="HondaSedan">
+            </div>
+        </div>
+
+        <!-- Left and right controls -->
+        <a class="carousel-control-prev" href="#demo" data-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </a>
+        <a class="carousel-control-next" href="#demo" data-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </a>
+
+    </div>
 {% endblock %}
 
