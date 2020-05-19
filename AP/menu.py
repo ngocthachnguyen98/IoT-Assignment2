@@ -13,6 +13,13 @@ import os
 id_names = {"Fahim":1, "Tyler":2}       #Created according to our current dataset
 
 def face_recognition():
+    """[summary]
+    - Summarize the steps this function does
+    - Mention a bit about the train.py
+
+    Returns:
+        int -- An User ID if facial recognition succeeds. None for the otherwise
+    """    
     flag = 0        #For break condition
     args = {
         "detector": "face_detection_model",
@@ -100,6 +107,7 @@ def face_recognition():
                 j = np.argmax(preds)
                 proba = preds[j]
                 name = le.classes_[j]
+
                 # draw the bounding box of the face along with the
                 # associated probability
                 text = "{}: {:.2f}%".format(name, proba * 100)
@@ -138,7 +146,9 @@ def face_recognition():
     cv2.destroyAllWindows()
     vs.stop()
     flag = 0
+
     return detected_id
+
 class Menu:
     """This class consists of 2 menus. One for logging in and the other one is for unlock/lock the car.
     Only when the user has logged in that he/she can unlock/lock the car in the second menu.
@@ -182,11 +192,11 @@ class Menu:
                 else: print("Invalid Credentials!")
             elif(selection == "2"): # Login with facial recognition
                 self.user_id = face_recognition()
+
                 if self.user_id is not None:
                     print("You logged in! Your user ID: {}".format(self.user_id))
                     self.runMenu2()
                 else: print("Invalid Credentials!")
-                break
             elif(selection == "0"): # Quit app
                 print("--- Goodbye! ---")
                 break
