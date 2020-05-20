@@ -137,7 +137,7 @@ class Menu:
 
     def face_recognition(self):
         """This function will called with the user chooses to login with facial recognition from Menu 1. It will try to recognise the user from the camera with its dataset.
-            The process was adapted from the following source https://www.pyimagesearch.com/2018/09/24/opencv-face-recognition/
+        The process was adapted from the following source: https://www.pyimagesearch.com/2018/09/24/opencv-face-recognition/
 
         The general steps are:
         - Load our serialized face detector from disk
