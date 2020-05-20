@@ -5,7 +5,7 @@ import os, requests, json
 from flask import current_app as app
 from passlib.hash import sha256_crypt
 from sqlalchemy import or_
-import calendar_for_api
+from calendar_for_api import Calendar
 from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map, icons
 from dynaconf import FlaskDynaconf
@@ -14,7 +14,10 @@ api = Blueprint("api", __name__)
 
 db = SQLAlchemy() # for accessing database
 ma = Marshmallow() # for serializing objects
-# GoogleMaps
+
+
+# Google Calendar
+calendar = Calendar()
 
 # DECLARING THE MODELS
 
@@ -458,7 +461,7 @@ def makeABooking():
                 'dateTime': return_datetime.replace(' ', 'T') + ':00+10:00',
             },
         }
-        calendar_for_api.insert(event)
+        calendar.insert(event)
 
         flash("Booking made")
 
@@ -510,7 +513,7 @@ def cancelABooking():
         db.session.commit()
 
         # Delete event from Google Calendar
-        calendar_for_api.delete(user_id, car_id, begin_datetime)
+        calendar.delete(user_id, car_id, begin_datetime)
 
         flash("Booking cancelled")
 
