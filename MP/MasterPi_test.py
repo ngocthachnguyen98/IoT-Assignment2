@@ -7,16 +7,19 @@ from passlib.hash import sha256_crypt
 from sqlalchemy import or_
 from flask_api import api, db, User, Booking, Car, History
 
+# The set up vairables for the test cases app and Google SQL access
 app = Flask(__name__)
-# Set up session for storing session data and showing flashed messages
-
 HOST        = "35.189.9.144"
 USER        = "root"
 PASSWORD    = "iotassignment2"
 DATABASE    = "CarShare"
 
-class TestDatabase(unittest.TestCase):
+class MasterPiTest(unittest.TestCase):
 
+    """
+        This is the set up for the test case, config the Flask app with
+        Database access variables and init the db (from flask_api) with the app context
+    """
     def setUp(self):
         db = SQLAlchemy()
         app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://{}:{}@{}/{}".format(USER, PASSWORD, HOST, DATABASE)
@@ -26,30 +29,40 @@ class TestDatabase(unittest.TestCase):
         with app.app_context():
             db.create_all()
 
+    # This will be the boolean function to check whether a user exists or not in
+    #  the database by browsing the username
     def userExists(self, username):
         data = db.session.query(User.id).filter_by(username = username).first()
         if data is None:
             return False
         else:
             return True
-            
+    # This will be the boolean function to check whether a car exists or not in
+    #  the database by browsing the car make         
     def carExists(self, carmake):
         data = db.session.query(Car.id).filter_by(make = carmake).first()
         if data is None:
             return False
         else:
             return True
-    
-    # def bookingExists(self, user_id, car_id):
+    # This will be the boolean function to check whether a booking exists or not in
+    #  the database by browsing the user id and car id, get the first result
+    def bookingExists(self, user_id, car_id):
+        data = db.session.query(Booking).filter_by(user_id = user_id, car_id = car_id).first()
+        if data is None:
+            return False
+        else:
+            return True
 
-
+    # This is the test of login, we try with 
     def test_login(self):
         username = "user1"
         password = "pw1"
         userID = 2
         data = db.session.query(User.id).filter_by(username = username).first()
         self.assertTrue(data[0] == 2)
-    
+    # This method creates a dummy user in the first run, from the second run
+    # it will only check if the user already exists
     def test_register(self):
         username        = "testusername"
         password        = "testpassword"
@@ -73,11 +86,13 @@ class TestDatabase(unittest.TestCase):
             db.session.add(newUser)
             db.session.commit()
             self.assertTrue(self.userExists(username))
+    # This test will search for a user history bases on his/her user id
     def test_userHistories(self):
-        user_id = 4
+        user_id = 13
         histories = History.query.filter_by(user_id = user_id).all()
         self.assertTrue((histories is not None))
-    
+    # This will test the search car function base on make, body type, colour,
+    # seats, cost per hour and booked
     def test_searchCar(self):
         make            = "Toyota"
         body_type       = "Seden"
@@ -92,13 +107,15 @@ class TestDatabase(unittest.TestCase):
                                                 Car.cost_per_hour   == cost_per_hour,
                                                 Car.booked          == booked)).all()
         self.assertTrue((cars is not None))
+    # This method will create a dummy car for testing the booking without disrupting
+    # other valid cars in the database
     def add_car(sefl):
         make            = "Test_Toyota"
         body_type       = "Seden"
         colour          = "Black"
-        seats           = "5"
+        seats           = 5
         location        = "-37.814, 144.96332"
-        cost_per_hour   = "10.5"
+        cost_per_hour   = 10.5
 
         newCar = Car( make = make,
                         body_type = body_type,
@@ -112,13 +129,58 @@ class TestDatabase(unittest.TestCase):
         db.session.add(newCar)
         db.session.commit()
         self.assertTrue(self.carExists(make))
-    # def test_bookCar(self):
-    #     user_id     = session.get("user_id")
-    #     car_id      = request.form.get("car_id")
-    #     begin_date  = request.form.get("begin_date")
-    #     begin_time  = request.form.get("begin_time")
-    #     return_date = request.form.get("return_date")
-    #     return_time = request.form.get("return_time")
+    # This method will use the dummy user to book a car and check in the Booking table
+    # if that booking exits
+    def test_bookCar(self):
+        user_id     = "13"
+        car_id      = "6"
+        begin_date  = "2020-05-21" 
+        begin_time  = "12:00:00"
+        return_date = "2020-05-23"
+        return_time = "12:00:00"
+
+        begin_datetime  = "{} {}".format(begin_date, begin_time) 
+        return_datetime = "{} {}".format(return_date, return_time)
+
+        newBooking = Booking(   user_id = user_id,
+                                car_id = car_id,
+                                begin_time = begin_datetime,
+                                return_time = return_datetime,
+                                ongoing = False)
+         # Add new row to the database
+        db.session.add(newBooking)
+
+        # Update car's availability 
+        car = Car.query.get(car_id) 
+        car.booked = True
+
+        # Commit changes
+        db.session.commit()
+        self.assertTrue(self.bookingExists(user_id, car_id))
+    # This method will delete the booking from the previous test and check
+    # if it still exits
+    def test_cancelBooking(self):
+        user_id     = "13"
+        car_id      = "6"
+        begin_date  = "2020-05-21" 
+        begin_time  = "12:00:00"
+
+        begin_datetime  = "{} {}".format(begin_date, begin_time) 
+
+        booking = db.session.query(Booking).filter( Booking.user_id == user_id,
+                                                    Booking.car_id == car_id,
+                                                    Booking.begin_time == begin_datetime).first()
+         # Delete row from the database
+        db.session.delete(booking)
+
+        # Update car's availability 
+        car = Car.query.get(car_id)
+        car.booked = False
+
+        # Commit changes
+        db.session.commit()
+
+        self.assertFalse(self.bookingExists(user_id, car_id))
 
 if __name__ == "__main__":
     unittest.main()
