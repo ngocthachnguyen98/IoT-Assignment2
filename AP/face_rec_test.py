@@ -1,3 +1,4 @@
+# LD_PRELOAD=/usr/lib/arm-linux-gnueabihf/libatomic.so.1 python3 face_rec_test.py
 import unittest
 from imutils.video import VideoStream
 from imutils.video import FPS
