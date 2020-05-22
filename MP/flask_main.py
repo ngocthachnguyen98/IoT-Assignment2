@@ -32,7 +32,6 @@ PASSWORD= "password"
 DATABASE= "Carshare"
 
 
-
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://{}:{}@{}/{}".format(USER, PASSWORD, HOST, DATABASE)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 
