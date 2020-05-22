@@ -1,5 +1,5 @@
-#import client_TCP
-#import requests
+import client_TCP
+import requests
 from imutils.video import VideoStream
 from imutils.video import FPS
 import numpy as np
