@@ -1,37 +1,18 @@
-{% extends "bootstrap/base.html" %}
-{% block title %} IoT - CarShare Application{% endblock %}
-
-
-{% block navbar %}
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">CarShare.co</a>
-            </div>
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="/home">Home</a></li>
-                <li><a href="/login">Sign In</a></li>
-                <li><a href="/register">Sign Up</a></li>
-            </ul>
-        </div>
-    </nav>
-{% endblock %}
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Show Car Location</title>
-    {{ mymap.js }}
-</head>
-
-{% block content %}
-    <div class="row d-flex justify-content-center">
-        <h2>Location of Car number {{ car_id }}</h2>
-        <div id="map">{{ mymap.html }}</div>
-    </div>
-
-
-
-{% endblock %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Show Car Location</title>
+        {{mymap.js}}
+    </head>
+    <body>
+        {% block content %}
+        <h2>Location of Car number {{car_id}}</h2>
+        {{mymap.html}}
+        {% endblock %} 
+    </body>
+</html>
 
 
 

@@ -1,3 +1,5 @@
+# LD_PRELOAD=/usr/lib/arm-linux-gnueabihf/libatomic.so.1 python3 menu.py
+
 import client_TCP
 import requests
 from imutils.video import VideoStream
@@ -20,7 +22,7 @@ class Menu:
     """
     user_id = None
 
-    id_names = {"Fahim":1, "Tyler":2}   # Created according to our current dataset (for facial recognition)
+    id_names = {"Fahim":1, "Tyler":2, "Vinh":3}   # Created according to our current dataset (for facial recognition)
 
     def main(self):
         """This function will start running the first menu, which is for logging in.
