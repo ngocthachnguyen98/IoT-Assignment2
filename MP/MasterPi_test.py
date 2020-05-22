@@ -9,10 +9,10 @@ from flask_api import api, db, User, Booking, Car, History
 
 # The set up vairables for the test cases app and Google SQL access
 app = Flask(__name__)
-HOST        = "35.189.9.144"
-USER        = "root"
-PASSWORD    = "iotassignment2"
-DATABASE    = "CarShare"
+HOST= "35.201.22.170"
+USER= "root"
+PASSWORD= "password"
+DATABASE= "Carshare"
 
 class MasterPiTest(unittest.TestCase):
 
@@ -37,6 +37,7 @@ class MasterPiTest(unittest.TestCase):
             return False
         else:
             return True
+   
     # This will be the boolean function to check whether a car exists or not in
     #  the database by browsing the car make         
     def carExists(self, carmake):
@@ -45,6 +46,7 @@ class MasterPiTest(unittest.TestCase):
             return False
         else:
             return True
+    
     # This will be the boolean function to check whether a booking exists or not in
     #  the database by browsing the user id and car id, get the first result
     def bookingExists(self, user_id, car_id):
@@ -58,9 +60,10 @@ class MasterPiTest(unittest.TestCase):
     def test_login(self):
         username = "user1"
         password = "pw1"
-        userID = 2
+        userID = 1
         data = db.session.query(User.id).filter_by(username = username).first()
-        self.assertTrue(data[0] == 2)
+        self.assertTrue(data[0] == userID)
+    
     # This method creates a dummy user in the first run, from the second run
     # it will only check if the user already exists
     def test_register(self):
@@ -86,11 +89,13 @@ class MasterPiTest(unittest.TestCase):
             db.session.add(newUser)
             db.session.commit()
             self.assertTrue(self.userExists(username))
+    
     # This test will search for a user history bases on his/her user id
     def test_userHistories(self):
-        user_id = 13
+        user_id = 12
         histories = History.query.filter_by(user_id = user_id).all()
         self.assertTrue((histories is not None))
+    
     # This will test the search car function base on make, body type, colour,
     # seats, cost per hour and booked
     def test_searchCar(self):
@@ -107,6 +112,7 @@ class MasterPiTest(unittest.TestCase):
                                                 Car.cost_per_hour   == cost_per_hour,
                                                 Car.booked          == booked)).all()
         self.assertTrue((cars is not None))
+    
     # This method will create a dummy car for testing the booking without disrupting
     # other valid cars in the database
     def add_car(sefl):
@@ -129,10 +135,11 @@ class MasterPiTest(unittest.TestCase):
         db.session.add(newCar)
         db.session.commit()
         self.assertTrue(self.carExists(make))
+    
     # This method will use the dummy user to book a car and check in the Booking table
     # if that booking exits
     def test_bookCar(self):
-        user_id     = "13"
+        user_id     = "12"
         car_id      = "6"
         begin_date  = "2020-05-21" 
         begin_time  = "12:00:00"
@@ -157,10 +164,11 @@ class MasterPiTest(unittest.TestCase):
         # Commit changes
         db.session.commit()
         self.assertTrue(self.bookingExists(user_id, car_id))
+    
     # This method will delete the booking from the previous test and check
     # if it still exits
     def test_cancelBooking(self):
-        user_id     = "13"
+        user_id     = "12"
         car_id      = "6"
         begin_date  = "2020-05-21" 
         begin_time  = "12:00:00"

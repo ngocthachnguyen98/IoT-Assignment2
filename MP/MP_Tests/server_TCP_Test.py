@@ -2,12 +2,12 @@ import unittest
 import server_TCP
 
 
-''' 
- To run the test use command:  python -m unittest SocketTest.py
- This command pass the test case to the unittest module
- All the test cases must be named in a fashion of "test_xxx" or the unittest module will skip the test, 
- so be sure to look at the output to see how many tests have ran to make sure all the tests have performed
-'''
+""" 
+To run the test use command:  python -m unittest SocketTest.py
+This command pass the test case to the unittest module
+All the test cases must be named in a fashion of "test_xxx" or the unittest module will skip the test, 
+so be sure to look at the output to see how many tests have ran to make sure all the tests have performed
+"""
 class MyTestCase(unittest.TestCase):
     def test_loginWithCredentials(self):
         # Arguments:
