@@ -618,17 +618,12 @@ def showCarLocation(car_id):
     car = Car.query.get(car_id) 
     location = car.location
 
-    mymap = Map(
-        identifier="view-side",  # for DOM element
-        varname="mymap",  # for JS object name
-        # Latitude and Longitude variables
-        lat = location.split(", ")[0],
-        lng = location.split(", ")[1],
-        markers=[(location.split(", ")[0], location.split(", ")[1])],
-    )
+    myLat = location.split(", ")[0]
+    myLng = location.split(", ")[1]
+
     return render_template("car_location.html",
         car_id=car_id,
-        mymap=mymap)
+        lat = myLat, lng = myLng)
 
 
 # Endpoint to check login credentials from Agent Pi
