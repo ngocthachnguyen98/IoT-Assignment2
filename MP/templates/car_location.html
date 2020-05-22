@@ -10,8 +10,7 @@
             </div>
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/home">Home</a></li>
-                <li><a href="/login">Sign In</a></li>
-                <li><a href="/register">Sign Up</a></li>
+                <li><a href="/logout">Log out</a></li>
             </ul>
         </div>
     </nav>
@@ -23,15 +22,16 @@
     {{ mymap.js }}
 </head>
 
+<body class="text-center">
 {% block content %}
-    <div class="row d-flex justify-content-center">
-        <h2>Location of Car number {{ car_id }}</h2>
-        {{ mymap.html }}
-    </div>
-
-
-
+    <h2>Location of all cars</h2>
+    {{ mymap.js }}
+    <br>
+    <h2>Location of Car number {{ car_id }}</h2>
+    {{ mymap.html }}
 {% endblock %}
+</body>
+
 
 
 
