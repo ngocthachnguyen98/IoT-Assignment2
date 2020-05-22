@@ -1,5 +1,7 @@
-#import client_TCP
-#import requests
+# LD_PRELOAD=/usr/lib/arm-linux-gnueabihf/libatomic.so.1 python3 menu.py
+
+import client_TCP
+import requests
 from imutils.video import VideoStream
 from imutils.video import FPS
 import numpy as np
