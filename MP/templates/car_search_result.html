@@ -20,23 +20,27 @@
     <div class="container">
         <table>
             <tr>
-                <th>Car ID</th>
-                <th>Make</th>
-                <th>Body Type</th>
-                <th>Colour</th>
-                <th>Seats</th>
-                <th>Location</th>
-                <th>Cost per hour (AUD)</th>
+                <th>&emsp;&emsp;ID&emsp;</th>
+                <th>Make&emsp;&emsp;&emsp;</th>
+                <th>Body Type&emsp;&emsp;</th>
+                <th>Colour&emsp;&emsp;</th>
+                <th>Seats&emsp;&emsp;</th>
+                <th>Location&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</th>
+                <th>Cost Per Hour&emsp;&emsp;</th>
                 <th>Booked</th>
             </tr>
             {% for car in cars %}
                 <tr>
-                    <td>{{ car.id }}</td>
+                    <td>&emsp;&emsp;{{ car.id }}</td>
                     <td>{{ car.make }}</td>
                     <td>{{ car.body_type }}</td>
                     <td>{{ car.colour }}</td>
                     <td>{{ car.seats }}</td>
-                    <td>{{ car.location }}</td>
+                    <td>
+                        <button type="submit" onClick="window.location='/car/location/{{ car.id }}'">Click for
+                            Location
+                        </button>
+                    </td>
                     <td>{{ car.cost_per_hour }}</td>
                     <td>{{ car.booked }}</td>
                 </tr>
