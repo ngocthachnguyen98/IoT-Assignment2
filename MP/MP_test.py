@@ -32,6 +32,13 @@ class MasterPiTest(unittest.TestCase):
     # This will be the boolean function to check whether a user exists or not in
     #  the database by browsing the username
     def userExists(self, username):
+        """
+            This function will return a boolean if a user with specific username
+            exits in the database, it will support later tests of user with assertion
+            - Parameter: username in String type
+            - Function, will search for a user id that has matching username from the param
+            - Return False if the searched user id is None
+        """
         data = db.session.query(User.id).filter_by(username = username).first()
         if data is None:
             return False
