@@ -150,9 +150,10 @@ if __name__ == '__main__':
                         # Trigger the right function to send request
                         reply = lockCar(user_id, car_id)
 
-                    
-                    print("Sending reply.")
-                    conn.sendall(reply.encode())
+                    if reply is not None:
+                        print("Sending reply.")
+                        conn.sendall(reply.encode())
+                    else: break
                 
                 print("Disconnecting from client.")
             print("Closing listening socket.")

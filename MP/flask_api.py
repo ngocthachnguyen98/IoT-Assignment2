@@ -379,13 +379,12 @@ def carSearch():
         cost_per_hour   = request.form.get("cost_per_hour")
         booked          = request.form.get("booked") # if this field is null, it's equivalent to 0, which booked = False 
 
-        cars = db.session.query(Car).filter(and_(Car.make            == make, 
+        cars = db.session.query(Car).filter(or_(Car.make            == make, 
                                                 Car.body_type       == body_type,
                                                 Car.colour          == colour,
                                                 Car.seats           == seats,
                                                 Car.location        == location,
-                                                Car.cost_per_hour   == cost_per_hour,
-                                                Car.booked          == booked)).all()
+                                                Car.cost_per_hour   == cost_per_hour)).all()
         
         result = cars_schema.dump(cars)
 
@@ -532,14 +531,16 @@ def unlockCar():
                                                     begin_time = begin_time).first()
 
     # Activate booking
-    booking.ongoing = 1
+    if booking is not None:
+        booking.ongoing = 1
 
-    # Commit changes
-    db.session.commit()
+        # Commit changes
+        db.session.commit()
 
-    flash("Unlocked Car")
+        flash("Unlocked Car")
 
-    return "unlocked"
+        return "unlocked"
+    else: return None
 
 
 # Endpoint to lock a car
@@ -564,31 +565,31 @@ def lockCar():
                                                     car_id = car_id,
                                                     ongoing = 1).first()
     
-    begin_time = booking.begin_time
-    return_time = booking.return_time
+    if booking is not None:
+        begin_time = booking.begin_time
+        return_time = booking.return_time
 
-    # Record finished booking to History table
-    newHistory = History(   user_id = user_id,
-                            car_id = car_id,
-                            begin_time = begin_time,
-                            return_time = return_time)
-    db.session.add(newHistory)
+        # Record finished booking to History table
+        newHistory = History(   user_id = user_id,
+                                car_id = car_id,
+                                begin_time = begin_time,
+                                return_time = return_time)
+        db.session.add(newHistory)
 
-    # Remove record from Booking table
-    db.session.delete(booking)
+        # Remove record from Booking table
+        db.session.delete(booking)
 
-    # Update car's availability
-    car = Car.query.get(car_id) 
-    car.booked = False
+        # Update car's availability
+        car = Car.query.get(car_id) 
+        car.booked = False
 
-    # TODO: Update car's location using Google Map API
+        # Commit changes
+        db.session.commit()
 
-    # Commit changes
-    db.session.commit()
+        flash("Locked Car")
 
-    flash("Locked Car")
-
-    return "locked"
+        return "locked"
+    else: return None
 
 
 # Endpoint to get car's location with Google Maps API
