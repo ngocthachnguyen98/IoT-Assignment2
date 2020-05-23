@@ -59,7 +59,7 @@ class Calendar:
         """
         # Get a list of events from the current time
         now = datetime.datetime.now().isoformat() + '+10:00'
-        events = service.events().list( calendarId='primary', 
+        events = self.service.events().list( calendarId='primary', 
                                         timeMin=now,
                                         maxResults=10, 
                                         singleEvents=True,
