@@ -9,10 +9,10 @@ from flask_api import api, db, User, Booking, Car, History
 
 # The set up vairables for the test cases app and Google SQL access
 app = Flask(__name__)
-HOST= "35.201.22.170"
-USER= "root"
-PASSWORD= "password"
-DATABASE= "Carshare"
+HOST="35.189.9.144"
+USER="root"
+PASSWORD="iotassignment2"
+DATABASE="CarShare"
 
 class MasterPiTest(unittest.TestCase):
 
@@ -32,6 +32,13 @@ class MasterPiTest(unittest.TestCase):
     # This will be the boolean function to check whether a user exists or not in
     #  the database by browsing the username
     def userExists(self, username):
+        """
+            This function will return a boolean if a user with specific username
+            exits in the database, it will support later tests of user with assertion
+            - Parameter: username in String type
+            - Function, will search for a user id that has matching username from the param
+            - Return False if the searched user id is None
+        """
         data = db.session.query(User.id).filter_by(username = username).first()
         if data is None:
             return False
@@ -61,8 +68,8 @@ class MasterPiTest(unittest.TestCase):
         username = "user1"
         password = "pw1"
         userID = 1
-        data = db.session.query(User.id).filter_by(username = username).first()
-        self.assertTrue(data[0] == userID)
+        data = db.session.query(User.id).filter_by(username = username, password = password).first()
+        self.assertTrue(data is not None)
     
     # This method creates a dummy user in the first run, from the second run
     # it will only check if the user already exists
@@ -89,6 +96,12 @@ class MasterPiTest(unittest.TestCase):
             db.session.add(newUser)
             db.session.commit()
             self.assertTrue(self.userExists(username))
+    #Get test user id for the later tests
+    def get_test_id(self):
+        test_username = "testusername"
+        test_user_id = db.session.query(User.id).filter_by(username = test_username).first()
+        print(test_user_id)
+        return test_user_id
     
     # This test will search for a user history bases on his/her user id
     def test_userHistories(self):
@@ -135,7 +148,7 @@ class MasterPiTest(unittest.TestCase):
         db.session.add(newCar)
         db.session.commit()
         self.assertTrue(self.carExists(make))
-    
+
     # This method will use the dummy user to book a car and check in the Booking table
     # if that booking exits
     def test_bookCar(self):
@@ -187,8 +200,62 @@ class MasterPiTest(unittest.TestCase):
 
         # Commit changes
         db.session.commit()
+        self.assertFalse(self.bookingExists(user_id, car_id))
+    
+    def test_unlockCar(self):
+        self.test_bookCar()
+        user_id     = "12"
+        car_id      = "6"
+        begin_date  = "2020-05-21" 
+        begin_time  = "12:00:00"
 
+        begin_datetime  = "{} {}".format(begin_date, begin_time)
+        # Check if this is the right user with the right booked car and time 
+        booking = db.session.query(Booking).filter_by(  user_id = user_id,
+                                                    car_id = car_id,
+                                                    begin_time = begin_datetime).first()
+
+        # Activate booking
+        booking.ongoing = 1
+
+        # Commit changes
+        db.session.commit()
+        self.assertTrue(self.bookingExists(user_id, car_id))
+        
+
+    def test_lockCar(self):
+
+        user_id     = "12"
+        car_id      = "6"
+        # Find the booking
+        booking = db.session.query(Booking).filter_by(user_id = user_id,
+                                                    car_id = car_id).first()
+        # Remove record from Booking table
+        # db.session.delete(booking)
+        begin_date  = "2020-05-21" 
+        begin_time  = "12:00:00"
+        return_date = "2020-05-23"
+        return_time = "12:00:00"
+
+        begin_datetime  = "{} {}".format(begin_date, begin_time) 
+        return_datetime = "{} {}".format(return_date, return_time)
+
+        # Record finished booking to History table
+        newHistory = History(   user_id = user_id,
+                                car_id = car_id,
+                                begin_time = begin_datetime,
+                                return_time = return_datetime)
+        db.session.add(newHistory)
+
+
+        # Update car's availability
+        car = Car.query.get(car_id) 
+        car.booked = False
+
+        # Commit changes
+        db.session.commit()
         self.assertFalse(self.bookingExists(user_id, car_id))
 
 if __name__ == "__main__":
     unittest.main()
+MasterPiTest.get_test_id()

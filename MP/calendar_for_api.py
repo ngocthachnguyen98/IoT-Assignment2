@@ -69,7 +69,7 @@ class Calendar:
 
         # Search for the right event and delete
         for event in events:
-            event_start_time    = event['start']['dateTime'].replace('T', ' ').split('+')[0] # '2020-05-02T10:00:00+10:00'
+            event_start_time    = event['start']['dateTime'].replace('T', ' ').split('+')[0] # Format: '2020-05-02T10:00:00+10:00'
             begin_time          = begin_time + ":00"
 
             if event['description'] == f'userId: {user_id} and carId: {car_id}' and event_start_time == begin_time:

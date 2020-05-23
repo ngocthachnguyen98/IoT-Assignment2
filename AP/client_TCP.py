@@ -2,11 +2,11 @@
 
 import socket
 
-HOST = input("Enter IP address of Carshare server: ")
+if __name__ == '__main__':
+    HOST = input("Enter IP address of Carshare server: ")   # The server's hostname or IP address
 
-# HOST = "0.0.0.0"    # The server's hostname or IP address
-PORT = 65000       # The port used by the server
-ADDRESS = (HOST, PORT)
+    PORT = 65000       # The port used by the server
+    ADDRESS = (HOST, PORT)
 
 def credentialsCheck():
     """This function will ask the user to enter their username and password.
