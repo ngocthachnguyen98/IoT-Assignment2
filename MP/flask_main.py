@@ -26,10 +26,10 @@ sess.init_app(app)
 
 # Variables for MySQL database connection on GCloud
 # Update HOST and PASSWORD appropriately.
-HOST= "35.201.22.170"
-USER= "root"
-PASSWORD= "password"
-DATABASE= "Carshare"
+HOST="35.189.9.144"
+USER="root"
+PASSWORD="iotassignment2"
+DATABASE="CarShare"
 
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://{}:{}@{}/{}".format(USER, PASSWORD, HOST, DATABASE)
