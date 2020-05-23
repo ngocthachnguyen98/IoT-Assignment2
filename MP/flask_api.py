@@ -4,7 +4,7 @@ from flask_marshmallow import Marshmallow
 import os, requests, json
 from flask import current_app as app
 from passlib.hash import sha256_crypt
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 from calendar_for_api import Calendar
 from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map, icons
@@ -379,17 +379,17 @@ def carSearch():
         cost_per_hour   = request.form.get("cost_per_hour")
         booked          = request.form.get("booked") # if this field is null, it's equivalent to 0, which booked = False 
 
-        cars = db.session.query(Car).filter(or_(Car.make            == make, 
+        cars = db.session.query(Car).filter(and_(Car.make            == make, 
                                                 Car.body_type       == body_type,
                                                 Car.colour          == colour,
                                                 Car.seats           == seats,
                                                 Car.location        == location,
                                                 Car.cost_per_hour   == cost_per_hour,
                                                 Car.booked          == booked)).all()
-
+        
         result = cars_schema.dump(cars)
 
-        return render_template("car_search_result.html", cars = result)
+        return render_template('car_search_result.html', cars = result)
 
     return render_template('car_search.html')
 
