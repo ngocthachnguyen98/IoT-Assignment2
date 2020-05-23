@@ -66,7 +66,11 @@ class MasterPiTest(unittest.TestCase):
     #  the database by browsing the user id and car id, get the first result
     def bookingExists(self, user_id, car_id):
         """
-            This function will 
+            This function will search the booking of specific user id and car id
+            then tell whether it exists or not
+            - Parameter: user id and car id in String type
+            - Function: search the booking with user id and car id in the parameter
+            - Return False if the booking result is None and vice versa
         """
         data = db.session.query(Booking).filter_by(user_id = user_id, car_id = car_id).first()
         if data is None:
@@ -76,6 +80,14 @@ class MasterPiTest(unittest.TestCase):
 
     # This is the test of login, we try with 
     def test_login(self):
+        """
+            This test will test the login credentials by query the database
+            to see if that username and password do exist
+            - Parameter: None
+            - Function: pass the username user1 and password pw1 to the database query
+            and search for that user with matching login credentials
+            - Assertion: the query result is not None
+        """
         username = "user1"
         password = "pw1"
         userID = 1
@@ -85,6 +97,14 @@ class MasterPiTest(unittest.TestCase):
     # This method creates a dummy user in the first run, from the second run
     # it will only check if the user already exists
     def test_register(self):
+        """
+            This test will create a dummy user in the database
+            we will use him for later test of booking/cancel booking functions
+            - Parameter: None
+            - Function: create a user with dummny details, check if the user exists (for second run or later)
+            if not, create a new user
+            - Assertion: the user with dummy details exists, check by the calling userExists()
+        """
         username        = "testusername"
         password        = "testpassword"
         email           = "testemail@gmail.com"
@@ -109,6 +129,11 @@ class MasterPiTest(unittest.TestCase):
             self.assertTrue(self.userExists(username))
     #Get test user id for the later tests
     def get_test_id(self):
+        """
+        This function will be the getter for dummy user id we created in the test abow
+        - Function: will search in the database for a user with username: testusername
+        - Return the query user id in Int type
+        """
         test_username = "testusername"
         test_user_id = db.session.query(User.id).filter_by(username = test_username).first()
         print(test_user_id)
@@ -116,6 +141,14 @@ class MasterPiTest(unittest.TestCase):
     
     # This test will search for a user history bases on his/her user id
     def test_userHistories(self):
+        """
+            This test will user history by query the database
+            to see if any row with matching user id (in this case 12) exists
+            - Parameter: None
+            - Function: pass the user id to the database query
+            and search for the history with matching user id
+            - Assertion: the query result is not None
+        """
         user_id = 12
         histories = History.query.filter_by(user_id = user_id).all()
         self.assertTrue((histories is not None))
@@ -123,6 +156,14 @@ class MasterPiTest(unittest.TestCase):
     # This will test the search car function base on make, body type, colour,
     # seats, cost per hour and booked
     def test_searchCar(self):
+        """
+            This test will test the car search by query the database
+            to see if any car with specific make, body type, etc do exist
+            - Parameter: None
+            - Function: pass the car make, car body type, etc. to the database query
+            and search for the car with matching attributes
+            - Assertion: the query result is not None
+        """
         make            = "Toyota"
         body_type       = "Seden"
         colour          = "Black"
@@ -140,6 +181,13 @@ class MasterPiTest(unittest.TestCase):
     # This method will create a dummy car for testing the booking without disrupting
     # other valid cars in the database
     def add_car(sefl):
+        """
+            This test will create a dummy car in the database
+            we will use it for later test of booking/cancel booking functions
+            - Parameter: None
+            - Function: create a car with dummny details, check if the car exists
+            - Assertion: the car with dummy details exists, check by the calling carExists(), here the make is Test_Toyota
+        """
         make            = "Test_Toyota"
         body_type       = "Seden"
         colour          = "Black"
@@ -163,6 +211,12 @@ class MasterPiTest(unittest.TestCase):
     # This method will use the dummy user to book a car and check in the Booking table
     # if that booking exits
     def test_bookCar(self):
+        """
+            This test will create a booking in the database
+            - Parameter: None
+            - Function: create a booking with user id = 12 , car id = 6, etc.
+            - Assertion: The booking with matching user id and car id exists, check by calling bookingExists()
+        """
         user_id     = "12"
         car_id      = "6"
         begin_date  = "2020-05-21" 
@@ -192,6 +246,12 @@ class MasterPiTest(unittest.TestCase):
     # This method will delete the booking from the previous test and check
     # if it still exits
     def test_cancelBooking(self):
+        """
+            This test will delete a booking in the database
+            - Parameter: None
+            - Function: query a booking with user id = 12 , car id = 6, etc. then delete it
+            - Assertion: The booking with matching user id and car id doesn't exist, check by calling bookingExists()
+        """
         user_id     = "12"
         car_id      = "6"
         begin_date  = "2020-05-21" 
@@ -214,6 +274,13 @@ class MasterPiTest(unittest.TestCase):
         self.assertFalse(self.bookingExists(user_id, car_id))
     
     def test_unlockCar(self):
+        """
+            This test will create a booking in the database, then will run the unlockCar function
+            - Parameter: None
+            - Function: create a booking with user id = 12 , car id = 6, etc.
+            then search for that booking, make its on going to be True
+            - Assertion: The booking with matching user id and car id exists, check by calling bookingExists()
+        """
         self.test_bookCar()
         user_id     = "12"
         car_id      = "6"
@@ -235,7 +302,14 @@ class MasterPiTest(unittest.TestCase):
         
 
     def test_lockCar(self):
-
+        """
+            This test will search for a booking that is on going in the database
+            then delete it
+            - Parameter: None
+            - Function: search for a booking with user id = 12 , car id = 6, ongoing = 1,
+            then delete that bookings and create a new row of History with the same attributes
+            - Assertion: The booking with matching user id and car id doesn't exist, check by calling bookingExists()
+        """
         user_id     = "12"
         car_id      = "6"
         # Find the booking
