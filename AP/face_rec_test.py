@@ -11,6 +11,14 @@ import cv2
 import os
 
 class FaceRecTest(unittest.TestCase):
+    """[summary]
+
+    Arguments:
+        unittest {TestCase} -- [description]
+
+    Returns:
+        boolean -- [description]
+    """
     id_names = {"Fahim":1, "Tyler":2, "Vinh":3}
 
     def test_face_recog(self):

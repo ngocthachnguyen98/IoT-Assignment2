@@ -18,7 +18,7 @@ app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 Bootstrap(app)
 
-# Set up session for storing session data and showing flashed messages
+# Set up session for storing session data
 sess = Session()
 app.secret_key = 'super secret key'
 app.config['SESSION_TYPE'] = 'filesystem'

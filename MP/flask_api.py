@@ -16,8 +16,9 @@ db = SQLAlchemy() # for accessing database
 ma = Marshmallow() # for serializing objects
 
 
-# Google Calendar
+# Declare Calendar object
 calendar = Calendar()
+
 
 # DECLARING THE MODELS
 
@@ -46,7 +47,7 @@ class User(db.Model):
             email {str} -- User's email
             fname {str} -- User's first name
             lname {str} -- User's last name
-            role {str} -- User's role (Customer/ Staff/ Admin)
+            role {str} -- User's role (Customer/ Admin/ Manager/ Engineer)
         """
         self.username   = username
         self.password   = password
@@ -86,9 +87,6 @@ class Car(db.Model):
     cost_per_hour   = db.Column(db.Float(4, 2),     nullable = False)
     booked          = db.Column(db.Boolean(),       nullable = False)
 
-    # bookings        = db.relationship('Booking', backref = 'Car', lazy = True) # One-to-many relationship
-    # histories       = db.relationship('History', backref = 'Car', lazy = True) # One-to-many relationship
-    
     def __init__(self, make, body_type, colour, seats, location, cost_per_hour, booked):
         """inits Car with data
 
@@ -211,7 +209,6 @@ histories_schema = HistorySchema(many=True) # instances of list of HistorySchema
 
 # ENDPOINTS
 
-# TESTED
 # Endpoint to register
 @api.route("/register", methods = ["GET", "POST"])
 def register():
@@ -268,7 +265,6 @@ def register():
     return render_template('register.html')
 
 
-# TESTED
 # Endpoint to login 
 @api.route("/login", methods=["GET", "POST"])
 def login():
@@ -317,7 +313,6 @@ def login():
     return render_template('login.html')
 
 
-# TESTED
 # Endpoint to logout
 @api.route('/logout')
 def logout():
@@ -334,7 +329,6 @@ def logout():
     return redirect(url_for('site.index'))
 
 
-# TESTED
 # Endpoint to view histories (user-specified)
 @api.route("/history/<user_id>", methods = ["GET"])
 def getUserHistories(user_id):
@@ -352,7 +346,6 @@ def getUserHistories(user_id):
     return jsonify(result)
 
 
-# TESTED
 # Endpoint to show all UNBOOKED cars
 @api.route("/car/unbooked", methods = ["GET"])
 def getUnbookedCars():
@@ -367,7 +360,6 @@ def getUnbookedCars():
     return jsonify(result)
 
 
-# TESTED
 # Endpoint to search for cars
 @api.route("/car/search", methods = ["GET", "POST"])
 def carSearch():
@@ -402,7 +394,6 @@ def carSearch():
     return render_template('car_search.html')
 
 
-# TESTED
 # Endpoint to make a booking
 @api.route("/booking/make", methods = ["GET", "POST"])
 def makeABooking():
@@ -470,7 +461,6 @@ def makeABooking():
     return render_template('make_a_booking.html')
 
 
-# TESTED
 # Endpoint to cancel a booking
 @api.route("/booking/cancel", methods = ["GET", "POST"])
 def cancelABooking():
