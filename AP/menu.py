@@ -53,14 +53,14 @@ class Menu:
             if(selection == "1"): # Login with credentials
                 self.user_id = self.login()
                 
-                if self.user_id is not None: 
+                if self.user_id != "": 
                     print("You logged in! Your user ID: {}".format(self.user_id))
                     self.runMenu2()
                 else: print("Invalid Credentials!")
             elif(selection == "2"): # Login with facial recognition
                 self.user_id = self.face_recognition()
 
-                if self.user_id is not None:
+                if self.user_id != "":
                     print("You logged in! Your user ID: {}".format(self.user_id))
                     self.runMenu2()
                 else: print("Invalid Credentials!")
