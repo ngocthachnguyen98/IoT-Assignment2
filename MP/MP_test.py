@@ -7,19 +7,21 @@ from passlib.hash import sha256_crypt
 from sqlalchemy import or_, and_
 from flask_api import api, db, User, Booking, Car, History
 
-# The set up vairables for the test cases app and Google SQL access
-app = Flask(__name__)
 
-HOST        = "35.189.9.144"
-USER        = "root"
-PASSWORD    = "iotassignment2"
-DATABASE    = "CarShare"
 
 class MasterPiTest(unittest.TestCase):
     """This is the set up for the test case, config the Flask app with
     Database access variables and init the db (from flask_api) with the app context
     """
     def setUp(self):
+        # The set up vairables for the test cases app and Google SQL access
+        app = Flask(__name__)
+
+        HOST        = "35.189.9.144"
+        USER        = "root"
+        PASSWORD    = "iotassignment2"
+        DATABASE    = "CarShare"
+
         db = SQLAlchemy()
         app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://{}:{}@{}/{}".format(USER, PASSWORD, HOST, DATABASE)
         app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
