@@ -12,12 +12,27 @@ from dynaconf import FlaskDynaconf
 
 api = Blueprint("api", __name__)
 
-db = SQLAlchemy() # for accessing database
-ma = Marshmallow() # for serializing objects
+def main():
+    db = SQLAlchemy() # for accessing database
+    ma = Marshmallow() # for serializing objects
 
 
-# Declare Calendar object
-calendar = Calendar()
+    # Declare Calendar object
+    calendar = Calendar()
+
+    user_schema = UserSchema()              # an instance of UserSchema
+    users_schema = UserSchema(many=True)    # instances of list of UserSchema
+
+    car_schema = CarSchema()                # an instance of CarSchema
+    cars_schema = CarSchema(many=True)      # instances of list of CarSchema
+
+    booking_schema = BookingSchema()            # an instance of BookingSchema
+    bookings_schema = BookingSchema(many=True)  # instances of list of BookingSchema
+
+    history_schema = HistorySchema()            # an instance of HistorySchema
+    histories_schema = HistorySchema(many=True) # instances of list of HistorySchema
+
+
 
 
 # DECLARING THE MODELS
@@ -66,8 +81,8 @@ class UserSchema(ma.Schema):
         # Fields to expose (not exposing password)
         fields = ('id', 'username', 'email', 'fname', 'lname', 'role')
 
-user_schema = UserSchema()              # an instance of UserSchema
-users_schema = UserSchema(many=True)    # instances of list of UserSchema
+# user_schema = UserSchema()              # an instance of UserSchema
+# users_schema = UserSchema(many=True)    # instances of list of UserSchema
 
 
 # CAR
@@ -117,8 +132,8 @@ class CarSchema(ma.Schema):
         # Fields to expose
         fields = ('id', 'make', 'body_type', 'colour', 'seats', 'location', 'cost_per_hour', 'booked')
 
-car_schema = CarSchema()            # an instance of CarSchema
-cars_schema = CarSchema(many=True)  # instances of list of CarSchema
+# car_schema = CarSchema()            # an instance of CarSchema
+# cars_schema = CarSchema(many=True)  # instances of list of CarSchema
 
 
 # BOOKING
@@ -162,8 +177,8 @@ class BookingSchema(ma.Schema):
         # Fields to expose (not exposing id)
         fields = ('user_id', 'car_id', 'begin_time', 'return_time', 'ongoing')
 
-booking_schema = BookingSchema()            # an instance of BookingSchema
-bookings_schema = BookingSchema(many=True)  # instances of list of BookingSchema
+# booking_schema = BookingSchema()            # an instance of BookingSchema
+# bookings_schema = BookingSchema(many=True)  # instances of list of BookingSchema
 
 
 # HISTORY
@@ -204,8 +219,8 @@ class HistorySchema(ma.Schema):
         # Fields to expose (not exposing id)
         fields = ('user_id', 'car_id', 'begin_time', 'return_time')
 
-history_schema = HistorySchema()            # an instance of HistorySchema
-histories_schema = HistorySchema(many=True) # instances of list of HistorySchema
+# history_schema = HistorySchema()            # an instance of HistorySchema
+# histories_schema = HistorySchema(many=True) # instances of list of HistorySchema
 
 # ENDPOINTS
 
@@ -642,3 +657,7 @@ def apLogin():
             return str(user_id)
         else: # Invalidated
             return None
+
+
+if __name__ == "__main__":
+    main()
