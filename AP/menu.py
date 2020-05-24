@@ -1,6 +1,6 @@
 # LD_PRELOAD=/usr/lib/arm-linux-gnueabihf/libatomic.so.1 python3 menu.py
 
-import client_TCP
+from client_TCP import ClientTCP
 import requests
 from imutils.video import VideoStream
 from imutils.video import FPS
@@ -21,6 +21,8 @@ class Menu:
     This class imports client_TCP.py module to send messages to the TCP for specific request.
     """
     user_id = None
+
+    clientTCP = ClientTCP()
 
     id_names = {"Fahim":1, "Tyler":2, "Vinh":3}   # Created according to our current dataset (for facial recognition)
 
@@ -79,7 +81,6 @@ class Menu:
         Enter 0 to log out 
         """
         while(True):
-            print("You logged in!")
             print()
             print("MENU 2")
             print("1. Unlock Car")
@@ -113,7 +114,7 @@ class Menu:
             int -- an User ID if the credentials are valid and None if they are invalid
         """
         print("--- Login ---")
-        user_id = client_TCP.credentialsCheck()
+        user_id = self.clientTCP.credentialsCheck()
         return user_id
 
 
@@ -124,8 +125,9 @@ class Menu:
             str -- "unlocked" if successful
         """
         print("--- Unlock Car ---")
-        unlocked = client_TCP.unlockCar(self.user_id)
+        unlocked = self.clientTCP.unlockCar(self.user_id)
         return unlocked
+
 
     def lockCar(self):
         """This function will trigger client_TCP.lockCar() and ask the user to enter their details to lock.
@@ -134,8 +136,9 @@ class Menu:
             str -- "locked" if successful
         """
         print("--- Lock Car ---")
-        locked = client_TCP.lockCar(self.user_id)
+        locked = self.clientTCP.lockCar(self.user_id)
         return locked
+
 
     def face_recognition(self):
         """This function will called with the user chooses to login with facial recognition from Menu 1. It will try to recognise the user from the camera with its dataset.

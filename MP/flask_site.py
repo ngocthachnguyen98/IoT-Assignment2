@@ -63,5 +63,3 @@ def carSearchPage():
         .html -- The Car Search page of the web application
     """
     return render_template('car_search.html')
-
-

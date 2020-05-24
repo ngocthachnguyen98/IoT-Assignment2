@@ -11,6 +11,11 @@ import cv2
 import os
 
 class FaceRecTest(unittest.TestCase):
+    """This test will run the face recognition function and then compare
+    the face with known IDs.
+
+    Assertion: For each case (each face) that it recognizes, it will compare the detected_id with known IDs using assertTrue()
+    """
     id_names = {"Fahim":1, "Tyler":2, "Vinh":3}
 
     def test_face_recog(self):
@@ -142,7 +147,7 @@ class FaceRecTest(unittest.TestCase):
         vs.stop()
         flag = 0
 
-        return detected_id
+        # Assertion
         if (detected_id == 1):
             self.assertTrue(id_names["Fahim"] == detected_id)
         elif (detected_id == 2):

@@ -4,18 +4,18 @@ import threading
 
 from werkzeug.debug import console
 
+# change the host if needed, will listern to any if leave blank
 PORT = 65000
-'''change the host if needed, will listern to any if leave blank'''
 HOST = ""
 ADDRESS = (HOST, PORT)
 
 class MyTestCase(unittest.TestCase):
 
-    '''
+    """
     A dummy server is created and run in a background thread,
     the dummy server will then listern indefinetly untill it
     receives a connection request from the client
-    '''
+    """
 
     def run_dummy_server(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -44,11 +44,11 @@ class MyTestCase(unittest.TestCase):
         server_thread.join()
 
 
-    '''
-        The test was eventually carried out manually using two Pi/ multiple shells to mock server and client,
-        since the unit test will just run with no response. Since the potential time required to build this
-        unit test can be lengthy, all the tests were done manually during the project development.
-    '''
+    """
+    The test was eventually carried out manually using two Pi/ multiple shells to mock server and client,
+    since the unit test will just run with no response. Since the potential time required to build this
+    unit test can be lengthy, all the tests were done manually during the project development.
+    """
 
 if __name__ == '__main__':
     unittest.main()

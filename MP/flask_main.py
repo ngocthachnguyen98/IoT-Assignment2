@@ -18,7 +18,7 @@ app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 Bootstrap(app)
 
-# Set up session for storing session data and showing flashed messages
+# Set up session for storing session data
 sess = Session()
 app.secret_key = 'super secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -26,17 +26,21 @@ sess.init_app(app)
 
 # Variables for MySQL database connection on GCloud
 # Update HOST and PASSWORD appropriately.
-HOST="35.189.9.144"
+HOST="35.201.22.170"
 USER="root"
-PASSWORD="iotassignment2"
-DATABASE="CarShare"
+PASSWORD="password"
+DATABASE="Carshare"
 
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://{}:{}@{}/{}".format(USER, PASSWORD, HOST, DATABASE)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 
 db.init_app(app)
-
+"""
+    This part declares GoogleMaps instance to use Map API,
+    to use this, you have to get your API key from Google Cloud Platform
+    and replace yours with the key below
+"""
 GoogleMaps(
     app,
     key="AIzaSyCvPI5uYTmN5D_phy_drF_B1iCMbem0Uf0"
