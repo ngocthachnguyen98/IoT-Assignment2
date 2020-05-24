@@ -12,10 +12,13 @@ from dynaconf import FlaskDynaconf
 
 api = Blueprint("api", __name__)
 
-def main():
-    db = SQLAlchemy() # for accessing database
-    ma = Marshmallow() # for serializing objects
+db = SQLAlchemy()
+ma = Marshmallow()
 
+calendar = None
+
+def main():
+    api = Blueprint("api", __name__)
 
     # Declare Calendar object
     calendar = Calendar()

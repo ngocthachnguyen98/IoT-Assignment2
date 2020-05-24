@@ -13,8 +13,11 @@ import socket, threading
 from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map, icons
 
+app = None
+
 def main():
     app = Flask(__name__)
+
     basedir = os.path.abspath(os.path.dirname(__file__))
     Bootstrap(app)
 
@@ -37,9 +40,7 @@ def main():
 
     db.init_app(app)
     """
-        This part declares GoogleMaps instance to use Map API,
-        to use this, you have to get your API key from Google Cloud Platform
-        and replace yours with the key below
+    This part declares GoogleMaps instance to use Map API, to use this, you have to get your API key from Google Cloud Platform and replace yours with the key below
     """
     GoogleMaps(
         app,

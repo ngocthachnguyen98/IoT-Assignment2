@@ -8,6 +8,8 @@ from sqlalchemy import or_, and_
 from flask_api import api, db, User, Booking, Car, History
 
 
+app = None
+db = SQLAlchemy()
 
 class MasterPiTest(unittest.TestCase):
     """This is the set up for the test case, config the Flask app with
@@ -22,7 +24,6 @@ class MasterPiTest(unittest.TestCase):
         PASSWORD    = "iotassignment2"
         DATABASE    = "CarShare"
 
-        db = SQLAlchemy()
         app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://{}:{}@{}/{}".format(USER, PASSWORD, HOST, DATABASE)
         app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
         app.app_context().push()
