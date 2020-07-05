@@ -22,6 +22,7 @@ We were asked to develop a system for a rental car service with Raspberry Pis an
 - Flask API
 - OpenCV
 - Google Cloud APIs (Calendar, Maps, SQL, etc.)
+- Sphinx Documentation
 
 ## Team members
 
